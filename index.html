@@ -3,95 +3,461 @@
 <head>
 <meta charset="utf-8">
 <title>艾臣科技年会抽奖</title>
+<link rel="stylesheet" type="text/css" href="">
 <link href="./css/ui-dialog.css" type="text/css" rel="stylesheet" media="screen, projection">
 <style type="text/css">
 * {margin: 0; padding: 0; box-sizing: border-box;}
 html,body{background-color: #6d0303;}
 ul,li{list-style: none;}
-.l-draw-start .l-name-item:after{background-color: rgba(0,0,0,0.8)}
+button{padding: 3px 10px;}
+table{border-collapse:collapse;}
+.l-app{position: relative;}
+.l-draw-start .l-name-item > div:after{background-color: rgba(0,0,0,0.8)}
 .l-text-center{text-align: center;}
-.l-name-list{max-width: 100%; width: 1240px; margin:0 auto; padding: 20px; overflow: hidden;}
-.l-name-item{float:left;width: 60px;height: 60px;border: 3px solid transparent; position: relative;}
-.l-name-item:after{content: '';position: absolute;top:0;left: 0;right: 0;bottom: 0;transition: all 0.3s linear;}
+.l-draw-box{max-width: 100%; width: 1240px; margin:0 auto; padding: 15px; position: relative;}
+.l-name-list{overflow: hidden;padding: 5px;}
+.l-name-item{float:left;width: 60px;height: 60px; position: relative;}
+.l-name-item > div{width: 100%;height: 100%; position: relative;border: 3px solid transparent; transition: all 0.3s linear;}
+.l-name-item > div:after{content: '';position: absolute;top:0;left: 0;right: 0;bottom: 0;transition: all 0.3s linear;}
 .l-name-item img{width: 100%;height: 100%;}
 .l-name-item.l-ignore img{filter:grayscale(100%);}
-.l-name-item.l-ignore:after{content: '已中奖'; background-color: rgba(0,0,0, 0.6); color: #fff; line-height: 54px; text-align: center; font-size: 12px; font-weight: bold;}
+.l-name-item.l-ignore > div:after{content: '已中奖'; background-color: rgba(0,0,0, 0.6); color: #fff; line-height: 54px; text-align: center; font-size: 12px; font-weight: bold;}
 .l-name-item.l-active,
-.l-name-item.l-winner{transform: scale(1.2);border-color: rgba(24, 255, 0, 0.8) /*rgba(255, 136, 6, 0.8)*/; z-index: 1;} 
-.l-name-item.l-active:after,
-.l-name-item.l-winner:after{display: none;}
+.l-name-item.l-winner{position: relative; z-index: 1;}
+.l-name-item.l-active > div,
+.l-name-item.l-winner > div{transform: scale(1.2);border-color: rgba(24, 255, 0, 0.8) /*rgba(255, 136, 6, 0.8)*/; z-index: 1;} 
+.l-name-item.l-active > div:after,
+.l-name-item.l-winner > div:after{display: none;}
+.l-prize-list{position: absolute; top:23px; right: -100px; width: 100px;text-align: center;}
+.l-prize-item{padding:10px;background-color: #fff;border-bottom: 1px solid #ebebeb;cursor: pointer;}
+.l-prize-item:last-child{border-bottom: none;}
+.l-prize-item.l-other{background-color: rgba(21, 158, 255, 0.8); color: #fff;}
+.l-prize-item.l-active{background-color: rgba(255, 136, 6, 0.8); color: #fff;}
 .l-draw-btn-box{margin: 20px auto;text-align: center;}
-.l-btn{
-  border:none; background-color: rgba(255, 136, 6, 0.8);
-  padding: 15px 30px;color: #fff; font-size: 16px;font-weight: bold;border-radius: 3px;
+.l-draw-btn-box .l-btn{border:none; background-color: rgba(255, 136, 6, 0.8);padding: 15px 30px;color: #fff; font-size: 16px;font-weight: bold;border-radius: 3px;}
+.l-btn.l-btn-error{background-color: rgba(255, 0, 0, 0.8);}
+.l-layer{
+  position: fixed;top:0;left:0;bottom:0;right: 0; z-index: 100; background-color: rgba(0,0,0,0.1); /*opacity: 0;*/
+  display: -webkit-box;display: -ms-flexbox;display: flex; opacity: 0;
+  -ms-flex-flow: column nowrap;flex-flow: column nowrap;
+  -webkit-box-align: center;-ms-flex-align: center;align-items: center;
+  -webkit-box-pack: center;-ms-flex-pack: center;justify-content: center; 
 }
+.l-layer .l-close{position: absolute; top: -15px; right: -15px; width: 50px; height: 50px; line-height: 50px; text-align: center; border-radius: 50%; background-color: rgba(255, 255, 255, 0.95); font-size: 14px; cursor: pointer; }
+
+.l-draw-result{background-color: rgba(255,255,255,0.95);padding: 15px; margin:20px 0; text-align: center;width: 650px; min-height: 300px; border-radius: 5px; position: relative; }
+.l-draw-result > h3{font-size: 30px; margin:10px 0 20px 0;}
+.l-draw-result ul{overflow: hidden;overflow-x: hidden;overflow-y: auto; max-height: 520px;}
+.l-draw-result li{display: inline-block;margin:10px;}
+.l-draw-result li img{width: 100px;height: 100px; border-radius: 50%;border: 1px solid #999;}
+.l-draw-result li p{margin: 5px 0;font-weight: bold;}
+.l-winner-list{background-color: rgba(255,255,255,0.95); width: 600px;min-height: 300px; padding: 10px;border-radius: 5px; position: relative;}
+.l-winner-list > h3{font-size: 30px; margin:10px 0;text-align: center;}
+.l-winner-tab-tit{ display: -webkit-box;display: -ms-flexbox;display: flex; overflow: hidden; text-align: center;}
+.l-winner-tab-tit li{-webkit-box-flex: 1;-ms-flex: 1;flex: 1; display:inline-block;padding: 10px;cursor: pointer;background-color: #ddd;
+    border-right: 1px solid #fff;}
+.l-winner-tab-tit li:last-child{border-right: none;}
+.l-winner-tab-tit li.l-active{background-color: #fb7704;color: #fff;}
+.l-winner-tab-cent{margin-top: -1px; max-height: 530px; overflow-x: hidden;overflow-y: auto;}
+.l-winner-tab-cent table{width: 100%;}
+.l-winner-tab-cent th,.l-winner-tab-cent td{padding: 10px;text-align: center;border-top: 1px solid #ddd;}
+.l-prize-settings{background-color: rgba(255,255,255,0.95); width: 600px;min-height: 300px; padding: 10px;border-radius: 5px; position: relative;}
+.l-prize-settings > h3{font-size: 30px; margin:10px 0;text-align: center;}
+.l-prize-settings table{width: 100%;}
+.l-prize-settings th{background-color: #ddd;}
+.l-prize-settings th,.l-prize-settings td{padding: 10px;text-align: center;border-top: 1px solid #ddd;}
+.l-prize-settings input[type=text]{width: 50px;padding: 5px 10px; text-align: center;}
+[v-cloak],.v-cloak{display: none;}
+.fade-transition{opacity:1; transition: opacity .3s ease-in; }
+.fade-enter,.fade-leave{opacity:0;}
 </style>
 </head>
 <body>
   <div id="app" class="l-app">
-    <ul id="l-name-list" class="l-name-list">
-      <li id="l-name-{{item.id}}" class="l-name-item" v-for="item in nameList">
-        <img :src="item.thumb">  
-      </li>
-    </ul>
+    <div class="l-draw-box">
+      <ul v-cloak id="l-name-list" class="l-name-list">
+        <li id="l-name-{{$index}}" class="l-name-item" :class="{'l-ignore': item.isWinner}" v-for="item in nameList">
+          <div>
+            <img :src="item.thumb">
+          </div>
+        </li>
+      </ul>
+      <ul id="l-prize-list" class="l-prize-list">
+        <li class="l-prize-item l-other" @click="showPrizeSettings">奖项设置</li>
+        <li class="l-prize-item" v-for="item in prizeList" v-text="item.name" 
+          :class="{'l-active': item === currPrize}" @click="this.currPrize = item"></li>
+      </ul>
+    </div>
     <div class="l-draw-btn-box">
-      <button v-show="!isDraw" class="l-btn" @click="drawStart">开始抽奖</button>
-      <button v-else class="l-btn" @click="drawStop">停止抽奖</button>
-      <button class="l-btn">奖项设置</button>
-      <button class="l-btn">中奖名单</button>
+      <button v-show="!isDrawing" class="l-btn" @click="drawStart">开始抽奖</button>
+      <button v-else class="l-btn l-btn-error" @click="drawStop">停止抽奖</button>
+      <button class="l-btn" @click="showHistoryList">中奖名单</button>
+    </div>
+    <!-- 中奖结果 -->
+    <div class="l-layer" v-if="isShowWinner" transition="fade">
+      <div class="l-draw-result">
+        <h3>恭喜获奖者</h3>
+        <ul>
+          <li v-for="index in drawWinners">
+            <img :src="nameList[index].image">
+            <p v-text="nameList[index].department"></p>
+            <p v-text="nameList[index].name"></p>
+          </li>
+        </ul>
+        <a class="l-close" @click="closeDrawWinner">关闭</a>
+      </div>
+    </div>
+    <!-- 中奖列表 -->
+    <div class="l-layer" v-show="isShowHistory" transition="fade">
+      <div class="l-winner-list">
+        <h3>中奖名单</h3>
+        <ul class="l-winner-tab-tit">
+          <li class="l-active" :class="{'l-active': prizeTabId === ''}" @click="prizeTabClick('')">全部</li>
+          <li v-for="item in prizeList" :class="{'l-active': prizeTabId === item.id}" @click="prizeTabClick(item.id)" v-text="item.name"></li>
+        </ul>
+        <div class="l-winner-tab-cent">
+          <table>
+            <tr>
+              <th>部门</th>
+              <th>姓名</th>
+              <th>奖项</th>
+            </tr>
+            <tr v-for="item in winnerHistory">
+              <td v-text="item.department"></td>
+              <td v-text="item.name"></td>
+              <td v-text="item.prize"></td>
+            </tr>
+          </table>
+        </div>
+        <div style="text-align: center; margin: 20px 0 0 0;">
+          <button v-if="winnerHistory.length > 0" class="l-btn" @click="resetHistoryList" style="padding: 5px 10px;">清除中奖名单</button>  
+        </div>
+        <a class="l-close" @click="this.isShowHistory = false">关闭</a>
+      </div>
+    </div>
+    <!-- 奖项设置 -->
+    <div class="l-layer" v-show="isShowSettings" transition="fade">
+      <div class="l-prize-settings">
+        <h3>奖项设置</h3>
+        <table>
+          <tr>
+            <th>序号</th>
+            <th>奖项名称</th>
+            <th>中奖人数</th>
+            <th>是否重复中奖</th>
+            <th>操作</th>
+          </tr>
+          <tr v-for="item in newPrizeList">
+            <td v-text="$index+1"></td>
+            <td>
+              <input type="text" style="width: 100px;" v-model="item.name">
+            </td>
+            <td>
+              <input type="text" v-model="item.winNum">
+            </td>
+            <td>
+              <label><input type="radio" name="repeat{{$index}}" value="1" v-model="item.isRepeat">&ensp;是</label>&nbsp;
+              <label><input type="radio" name="repeat{{$index}}" value="0" v-model="item.isRepeat">&ensp;否</label>
+            </td>
+            <td>
+              <button @click="delPrize(item)">删除</button>
+            </td>
+          </tr>
+        </table>
+        <div style="text-align: center;margin: 20px 0 10px;">
+          <button @click="addPrize">增加奖项</button>&ensp;
+          <button @click="setNewPrizeList">确定</button>
+        </div>
+        <a class="l-close" @click="this.isShowSettings = false">关闭</a>
+      </div>
     </div>
   </div>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.28/vue.js"></script>
+  <script type="text/javascript" src="./js/utils.js"></script>
   <script type="text/javascript">
   $(function(){
-    var startId = 0;
+    // 默认奖项列表
+    var _prizeList = [
+      {
+        id: 1,
+        name: '一等奖',
+        winNum: 3,
+        isRepeat: 0
+      },{
+        id: 2,
+        name: '二等奖',
+        winNum: 5,
+        isRepeat: 0
+      },{
+        id: 3,
+        name: '三等奖',
+        winNum: 10,
+        isRepeat: 0
+      }
+    ];
+
+    utils.storage.local.set('winnerHistory', utils.storage.local.get('winnerHistory') || []);
+    utils.storage.local.set('prizeList', utils.storage.local.get('prizeList') || _prizeList);
+
     var vm = new Vue({
       el: document.body,
       data: function(){
         return {
-          winnerNum: 1,
-          isDraw: false,
-          nameList: []
+          prizeTabId: '',   
+          nameList: [],           // 抽奖名单
+          currPrize: null,        // 当前奖项
+          prizeList: [],          // 奖项列表
+          newPrizeList: [],       // 新增奖项列表
+          drawWinners: [],        // 本次中奖名单
+          winnerHistory: [],      // 历史中奖名单
+          isCanStop: false,       // 完成动画才能停止抽奖
+          isDrawing: false,       // 是否在抽奖
+          isShowWinner: false,
+          isShowHistory: false,
+          isShowSettings: false
         }
       },
       ready: function(){
+        var self = this;
+        // 初始化抽奖名单(模拟数据)
         var nameList = [];
         for (var i = 200; i > 0; i--) {
           nameList.push({
             id: i,
-            name: '赖国聪',
-            department: '技术部',
+            name: '赖国聪'+i,
+            department: '技术部'+i,
             thumb: 'http://thecodeplayer.com/u/uifaces/'+ ((i-1)%50+1) +'.jpg',
             image: 'http://thecodeplayer.com/u/uifaces/'+ ((i-1)%50+1) +'.jpg',
             isWinner: false
           });
         }
-        this.nameList = nameList;
+
+        // 判断抽奖名单是否已中过奖
+        var winnerHistory = utils.storage.local.get('winnerHistory');
+        nameList.forEach(function(item){
+          winnerHistory.forEach(function(item2){
+            if(item2.id === item.id){
+              item.isWinner = true;
+              return true;
+            }
+          });
+        });
+
+        // 抽奖名单
+        self.nameList = nameList;
+        // 奖项列表
+        self.prizeList = utils.storage.local.get('prizeList');
+
+
+        var resetPosition = function(){
+          var $nameList = $('#l-name-list').find('.l-name-item')
+            .css('transition', 'inherit')
+            .css('transform', 'translate3d(0, 0, 0)');
+
+          clearTimeout(self.positionTimeid);
+          self.positionTimeid = setTimeout(function(){
+            var position = {};
+            self.nameList.forEach(function(item, index){
+              position = $nameList.eq(index).position();
+              item.top = position.top;
+              item.left = position.left;
+            });
+            self.sort();
+          }, 50);
+        };
+        self.$nextTick(resetPosition);
+        $(window).on('resize', function(){
+          clearTimeout(self.resizeTimeid);
+          self.resizeTimeid = setTimeout(resetPosition, 500);
+        });
       },
       methods: {
-        drawStart: function(){
-          if(this.isDraw) return;
-
-          $('#app').addClass('l-draw-start');
-          this.isDraw = true;
-          this.drawIng();
-        },
-        drawStop: function(){
-          this.isDraw = false;
-          // $('#app').removeClass('l-draw-start');
-        },
-        drawIng: function(){
+        // 乱序
+        sort: function(){
+          // 生成一个乱序数组
           var self = this;
-          startId = setInterval(function(){
-            if(self.isDraw){
-              var random = Math.floor(Math.random() * 200);
-              $('#l-name-list .l-active').removeClass('l-active');
-              $('#l-name-' + random).addClass('l-active');
-            }else{
-              clearInterval(startId);
+          var randArr = [];
+          var length = self.nameList.length;
+          for (var i = length - 1; i >= 0; i--) {
+            randArr.push(i);
+          }
+          randArr.sort(function(){
+            return 0.5 - Math.random();
+          });
+
+          var x1,y1, x2,y2, x,y;
+          $('#l-name-list').find('.l-name-item').each(function(index){
+            x1 = self.nameList[index].left;
+            y1 = self.nameList[index].top;
+
+            x2 = self.nameList[randArr[index]].left;
+            y2 = self.nameList[randArr[index]].top;
+
+            x = x2-x1;
+            y = y2-y1;
+
+            $(this).css('transition', 'all 0.5s linear').css('transform', 'translate3d('+x+'px, '+y+'px, 0)');
+          });
+        },
+        // 抽奖开始
+        drawStart: function(){
+          var self = this;
+          if(self.isDrawing) return;
+
+          if(!self.currPrize){
+            alert('请选择一个抽奖奖项');
+            return;
+          }
+
+          self.isDrawing = true;
+          self.isCanStop = false;
+          self.sort();
+
+          var allNum = self.nameList.length;      // 抽奖总人数
+          var isRepeat = self.currPrize.isRepeat; // 是否可以重复抽奖
+          var drawWinners = [];                   // 本次抽奖中奖名单(数组下标)
+          var winNum = self.currPrize.winNum;     // 本次中奖人数
+          var rand = 0;                           // 随机数
+          
+          // 随机抽取中奖名单
+          for(var i = 0; i < winNum; i++){
+            while(true){
+              rand = Math.floor(Math.random() * allNum);
+              if(!drawWinners.includes(rand)){
+                // 如果可重复抽奖或者之前没中过奖
+                if(isRepeat || !self.nameList[rand].isWinner){ 
+                  drawWinners.push(rand);
+                  break;
+                }
+              }
             }
-          }, 100);
+          }
+          self.drawWinners = drawWinners;
+
+          setTimeout(function(){
+            $('#app').addClass('l-draw-start');
+            self.drawing();
+            self.isCanStop = true;
+          }, 800);
+        },
+        // 抽奖中
+        drawing: function(){
+          var self = this;
+          var allNum = self.nameList.length; 
+          clearInterval(self.drawTimeid);
+          self.drawTimeid = setInterval(function(){
+            if(self.isDrawing){
+              var rand = Math.floor(Math.random() * allNum);
+              $('#l-name-list .l-active').removeClass('l-active');
+              $('#l-name-' + rand).addClass('l-active');
+            }else{
+              clearInterval(self.drawTimeid);
+            }
+          }, 200);
+        },
+        // 停止抽奖
+        drawStop: function(){
+          var self = this;
+          if(!self.isCanStop) return;
+
+          var winnerHistory = utils.storage.local.get('winnerHistory');
+          var promises = [];
+          self.drawWinners.forEach(function(value){
+            var promise = new Promise(function(resolve){
+              setTimeout(function(){
+                $('#l-name-' + value).addClass('l-winner');
+                var item = Object.assign({
+                  prize: self.currPrize.name,
+                  prizeId: self.currPrize.id
+                }, self.nameList[value]);
+
+                winnerHistory.push(item);
+                resolve();
+              }, Math.random() * 3000);
+            });
+
+            promises.push(promise);
+          });
+
+          Promise.all(promises).then(function(){
+            self.isDrawing = false;
+            self.isCanStop = false;
+            $('#l-name-list .l-active').removeClass('l-active');
+            // 保存中奖名单
+            utils.storage.local.set('winnerHistory', winnerHistory);
+            // 显示中奖结果
+            self.isShowWinner = true;
+          }).catch(function(){
+
+          });
+        },
+        // 关闭中奖弹窗
+        closeDrawWinner: function(){
+          var self = this;
+          self.isShowWinner = false;
+          var item = null;
+          setTimeout(function(){
+            $('#app').removeClass('l-draw-start');
+            $('#l-name-list .l-active').removeClass('l-active');
+            $('#l-name-list .l-winner').removeClass('l-winner');
+            self.drawWinners.forEach(function(index){
+              item = self.nameList[index];
+              item.isWinner = true;
+              self.nameList.$set(index, item);
+            });
+          }, 500);
+        },
+        // 中奖名单tab
+        prizeTabClick: function(id){
+          this.prizeTabId = id;
+          var winnerHistory = utils.storage.local.get('winnerHistory');
+          if(!id){
+            this.winnerHistory = winnerHistory;
+          }else{
+            this.winnerHistory = winnerHistory.filter(function(item){
+              return item.prizeId === id;
+            });
+          }
+        },
+        // 显示中奖名单
+        showHistoryList: function(){
+          this.isShowHistory = true;
+          this.prizeTabClick(this.prizeTabId);
+        },
+        // 清除中奖名单
+        resetHistoryList: function(){
+          utils.storage.local.set('winnerHistory_bak', utils.storage.local.get('winnerHistory'));
+          utils.storage.local.set('winnerHistory', []);
+          this.winnerHistory = [];
+          this.isShowHistory = false;
+        },
+        // 显示奖项设置
+        showPrizeSettings: function(){
+          this.isShowSettings = true;
+          this.newPrizeList = this.prizeList.concat();
+        },
+        // 增加奖项
+        addPrize: function(){
+          var length = this.newPrizeList.length;
+          this.newPrizeList.push({
+            id: length+1,
+            name: '奖项名称',
+            winNum: 1,
+            isRepeat: 0
+          })
+        },
+        // 删除奖项
+        delPrize: function(prizeEntity){
+          var newPrizeList = this.newPrizeList.filter(function(item){
+            return prizeEntity.id !== item.id
+          });
+          this.newPrizeList = newPrizeList;
+        },
+        setNewPrizeList: function(){
+          this.prizeList = this.newPrizeList.concat();
+          utils.storage.local.set('prizeList', this.prizeList);
+          this.isShowSettings = false;
         }
       }
     });
