@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>艾臣智能门窗年会抽奖</title>
+<link rel="stylesheet" type="text/css" href="./css/app.css">
+</head>
+<body>
+  <div id="app" class="l-app">
+    <div class="l-draw-box">
+      <ul v-cloak id="name-list" class="l-name-list">
+        <li id="name-{{$index}}" class="l-name-item" :class="{'l-ignore': item.isWinner}" v-for="item in nameList">
+          <div>
+            <img :src="item.thumb">
+          </div>
+        </li>
+      </ul>
+      <div id="prize-list" class="l-prize-list">
+        <ul>
+          <li class="l-prize-item l-other" style="border-bottom: none;" @click="showPrizeSettings">奖项设置</li>
+          <li class="l-prize-item" v-for="item in prizeList" v-text="item.name" 
+            :class="{'l-active': item === currPrize}" @click="sltPrize(item)"></li>
+        </ul>
+        <div class="l-prize-tip-text">
+          <img width="300" src="images/tip.png" alt="">
+        </div>
+      </div>
+    </div>
+    <div class="l-draw-btn-box">
+      <button v-if="!isDrawing && !isStoping" class="l-btn" @click="drawStart">开始抽奖</button>
+      <button v-if="isDrawing && !isStoping" class="l-btn l-btn-error" @click="drawStop">停止抽奖</button>
+      <button v-if="isStoping" class="l-btn l-btn-success">等待结果</button>&nbsp;
+      <button class="l-btn" @click="showHistoryList">中奖名单</button>
+    </div>
+    <!-- 中奖结果 -->
+    <div class="l-layer" v-if="isShowWinner" transition="fade">
+      <div class="l-draw-result">
+        <h3>恭喜获奖者</h3>
+        <ul>
+          <li v-for="index in drawWinners">
+            <img :src="nameList[index].image">
+            <p v-text="nameList[index].department"></p>
+            <p v-text="nameList[index].name"></p>
+          </li>
+        </ul>
+        <a class="l-close" @click="closeDrawWinner">关闭</a>
+      </div>
+    </div>
+    <!-- 中奖列表 -->
+    <div class="l-layer" v-show="isShowHistory" transition="fade">
+      <div class="l-winner-list">
+        <h3>中奖名单</h3>
+        <ul class="l-winner-tab-tit">
+          <li class="l-active" :class="{'l-active': prizeTabId === ''}" @click="prizeTabClick('')">全部</li>
+          <li v-for="item in prizeList" :class="{'l-active': prizeTabId === item.id}" @click="prizeTabClick(item.id)" v-text="item.name"></li>
+        </ul>
+        <div class="l-winner-tab-cent">
+          <table>
+            <tr>
+              <th>部门</th>
+              <th>姓名</th>
+              <th>奖项</th>
+            </tr>
+            <tr v-for="item in winnerHistory">
+              <td v-text="item.department"></td>
+              <td v-text="item.name"></td>
+              <td v-text="item.prize"></td>
+            </tr>
+          </table>
+        </div>
+        <div style="text-align: center; margin: 20px 0 0 0;">
+          <button v-if="winnerHistory.length > 0" class="l-btn-default" @click="resetHistoryList" style="padding: 5px 10px;">清除中奖名单</button>  
+        </div>
+        <a class="l-close" @click="this.isShowHistory = false">关闭</a>
+      </div>
+    </div>
+    <!-- 奖项设置 -->
+    <div class="l-layer" v-show="isShowSettings" transition="fade">
+      <div class="l-prize-settings">
+        <h3>奖项设置</h3>
+        <table>
+          <tr>
+            <th>序号</th>
+            <th>奖项名称</th>
+            <th>中奖人数</th>
+            <th>是否重复中奖</th>
+            <th>操作</th>
+          </tr>
+          <tr v-for="item in newPrizeList">
+            <td v-text="$index+1"></td>
+            <td>
+              <input type="text" style="width: 100px;" v-model="item.name">
+            </td>
+            <td>
+              <input type="text" v-model="item.winNum">
+            </td>
+            <td>
+              <label><input type="radio" name="repeat{{$index}}" value="1" v-model="item.isRepeat">&ensp;是</label>&nbsp;
+              <label><input type="radio" name="repeat{{$index}}" value="0" v-model="item.isRepeat">&ensp;否</label>
+            </td>
+            <td>
+              <button @click="delPrize(item)">删除</button>
+            </td>
+          </tr>
+        </table>
+        <div style="text-align: center;margin: 20px 0 10px;">
+          <button class="l-btn-default" @click="addPrize">增加奖项</button>&ensp;
+          <button class="l-btn-default" @click="setNewPrizeList">保存</button>
+        </div>
+        <a class="l-close" @click="this.isShowSettings = false">关闭</a>
+      </div>
+    </div>
+    <!-- 提示框 -->
+  </div>
+  <div class="l-hidden-area">
+    <audio id="runingmic" loop>
+      <source src="./music/runing.mp3">
+    </audio>
+    <audio id="winnermic">
+      <source src="./music/winner.mp3">
+    </audio>
+    <audio id="clickmic">
+      <source src="./music/click.mp3">
+    </audio>
+  </div>
+  <div id="fireworks" class="fireworks"></div>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.28/vue.js"></script>
+  <script type="text/javascript" src="./js/utils.js"></script>
+  <script type="text/javascript" src="./js/jquery.fireworks.js"></script>
+  <script type="text/javascript" src="./js/app.js"></script>
+</body>
+</html>

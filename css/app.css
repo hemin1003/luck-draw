@@ -1,0 +1,82 @@
+* {margin: 0; padding: 0; box-sizing: border-box;}
+html{height: 100%;}
+body{height: 100%;background:#c60814 url('../images/bg.jpg') 50% 0 no-repeat;background-attachment: fixed;}
+ul,li{list-style: none;}
+button{padding: 3px 10px;}
+table{border-collapse:collapse;}
+.l-app{position: relative;}
+.l-draw-start .l-name-item > div:after{background-color: rgba(0,0,0,0.8)}
+.l-text-center{text-align: center;}
+.l-draw-box{max-width: 100%; width: 1240px; margin:0 auto; padding: 15px 135px 15px 15px; position: relative;}
+.l-name-list{overflow: hidden;padding: 5px;/* background: rgba(255,255,255, 0.2); */border-radius: 5px; min-height: 700px;}
+.l-name-item{float:left;width: 60px;height: 60px; position: relative;}
+.l-name-item > div{width: 100%;height: 100%; position: relative;border: 3px solid transparent; transition: all 0.3s linear;}
+.l-name-item > div:after{content: '';position: absolute;top:0;left: 0;right: 0;bottom: 0;transition: all 0.3s linear;}
+.l-name-item img{width: 100%;height: 100%;border-radius: 2px;}
+.l-name-item.l-ignore img{filter:grayscale(100%);}
+.l-name-item.l-ignore > div:after{content: '已中奖'; background-color: rgba(0,0,0, 0.6); color: #fff; line-height: 54px; text-align: center; font-size: 12px; font-weight: bold;}
+.l-name-item.l-active,
+.l-name-item.l-winner{position: relative; z-index: 1;}
+.l-name-item.l-active > div,
+.l-name-item.l-winner > div{transform: scale(1.2);border-color: rgba(24, 255, 0, 0.8); z-index: 1;} 
+.l-name-item.l-active > div:after,
+.l-name-item.l-winner > div:after{display: none;}
+.l-prize-list{position: absolute; top: 23px; right: 0; width: 135px; text-align: center; }
+.l-prize-tip{outline: 10000px solid rgba(0,0,0,0.8);background: rgba(0,0,0,0.8);}
+.l-prize-tip-text{ position: absolute; color: #fff; left: -300px; top: 100px; display: none;}
+.l-prize-tip .l-prize-tip-text{display: block;}
+.l-prize-item{padding:10px;background-color: #fff;cursor: pointer;transition: all 0.3s linear; margin:0 0 10px 10px;font-weight: bold;border-radius: 2px;}
+.l-prize-item.l-active,
+.l-prize-item:hover{transform: translate3d(-10px,0,0);background-color: rgba(255, 136, 6, 0.8); color: #fff;}
+.l-prize-item:last-child{border-bottom: none;}
+.l-prize-item.l-other{background-color: rgba(21, 158, 255, 0.8); color: #fff;}
+
+.l-draw-btn-box{margin: 20px auto;text-align: center;}
+.l-draw-btn-box .l-btn{border:none; background-color: rgba(255, 136, 6, 0.9);padding: 15px 30px;color: #fff; font-size: 16px;font-weight: bold;border-radius: 3px;}
+.l-draw-btn-box .l-btn:hover{background-color: rgba(255, 136, 6, 1);}
+.l-btn.l-btn-error{background-color: rgba(255, 0, 0, 0.8);}
+.l-btn.l-btn-error:hover{background-color: rgba(255, 0, 0, 1);}
+.l-btn.l-btn-success{background-color: rgba(76, 217, 100, 0.8);}
+.l-btn.l-btn-success:hover{background-color: rgba(76, 217, 100, 1);}
+.l-btn-default{border:none; background-color: rgba(21, 158, 255, 0.8);padding: 7px 15px;color: #fff; font-size: 14px;border-radius: 3px; }
+.l-btn-default:hover,.l-btn-default:active{background-color: rgba(21, 158, 255, 1);}
+.l-layer{
+  position: fixed;top:0;left:0;bottom:0;right: 0; z-index: 100; background-color: rgba(0,0,0,0.1); /*opacity: 0;*/
+  display: -webkit-box;display: -ms-flexbox;display: flex; opacity: 0;
+  -ms-flex-flow: column nowrap;flex-flow: column nowrap;
+  -webkit-box-align: center;-ms-flex-align: center;align-items: center;
+  -webkit-box-pack: center;-ms-flex-pack: center;justify-content: center; 
+}
+.l-layer .l-close{position: absolute; top: -15px; right: -15px; width: 50px; height: 50px; line-height: 50px; text-align: center; border-radius: 50%; background-color: rgba(255, 255, 255, 0.95); font-size: 14px; cursor: pointer; }
+
+.l-draw-result{background-color: rgba(255,255,255,0.95);padding: 15px; margin:20px 0; text-align: center;width: 650px; min-height: 300px; border-radius: 5px; position: relative; }
+.l-draw-result > h3{font-size: 30px; margin:10px 0 20px 0;}
+.l-draw-result ul{overflow: hidden;overflow-x: hidden;overflow-y: auto; max-height: 520px;}
+.l-draw-result li{display: inline-block;margin:10px;}
+.l-draw-result li img{width: 100px;height: 100px; border-radius: 50%;border: 1px solid #999;}
+.l-draw-result li p{margin: 5px 0;font-weight: bold;}
+
+.l-draw-result li:only-child img{border-radius: 0;width: 300px;height: 300px; display: block; margin:auto;}
+.l-draw-result li:only-child p{display: inline-block; margin:20px 10px;}
+
+.l-winner-list{background-color: rgba(255,255,255,0.95); width: 600px;min-height: 300px; padding: 10px;border-radius: 5px; position: relative;}
+.l-winner-list > h3{font-size: 30px; margin:10px 0;text-align: center;}
+.l-winner-tab-tit{ display: -webkit-box;display: -ms-flexbox;display: flex; overflow: hidden; text-align: center;}
+.l-winner-tab-tit li{-webkit-box-flex: 1;-ms-flex: 1;flex: 1; display:inline-block;padding: 10px;cursor: pointer;background-color: #ddd;
+    border-right: 1px solid #fff;}
+.l-winner-tab-tit li:last-child{border-right: none;}
+.l-winner-tab-tit li.l-active{background-color: #fb7704;color: #fff;}
+.l-winner-tab-cent{margin-top: -1px; max-height: 530px; overflow-x: hidden;overflow-y: auto;}
+.l-winner-tab-cent table{width: 100%;}
+.l-winner-tab-cent th,.l-winner-tab-cent td{padding: 10px;text-align: center;border-top: 1px solid #ddd;}
+.l-prize-settings{background-color: rgba(255,255,255,0.95); width: 600px;min-height: 300px; padding: 10px;border-radius: 5px; position: relative;}
+.l-prize-settings > h3{font-size: 30px; margin:10px 0;text-align: center;}
+.l-prize-settings table{width: 100%;}
+.l-prize-settings th{background-color: #ddd;}
+.l-prize-settings th,.l-prize-settings td{padding: 10px;text-align: center;border-top: 1px solid #ddd;}
+.l-prize-settings input[type=text]{width: 50px;padding: 5px 10px; text-align: center;}
+.l-hidden-area{height: 0;overflow: hidden; visibility: hidden;}
+[v-cloak],.v-cloak{display: none;}
+.fade-transition{opacity:1; transition: opacity .3s ease-in; }
+.fade-enter,.fade-leave{opacity:0;}
+.fireworks{position:fixed;bottom:0;left:0;width:100%;height: 100%; z-index: 10; pointer-events: none;}
