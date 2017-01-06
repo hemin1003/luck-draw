@@ -2,16 +2,16 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>艾臣智能门窗年会抽奖</title>
+<title>艾臣安全门窗年会抽奖</title>
 <link rel="stylesheet" type="text/css" href="./css/app.css">
 </head>
 <body>
   <div id="app" class="l-app">
     <div class="l-draw-box">
       <ul v-cloak id="name-list" class="l-name-list">
-        <li id="name-{{$index}}" class="l-name-item" :class="{'l-ignore': item.isWinner}" v-for="item in nameList">
+        <li id="name-{{$index}}" class="l-name-item" :class="{'l-ignore': item.isWin}" v-for="item in nameList">
           <div>
-            <img :src="item.thumb">
+            <img :src="item.thumbnail">
           </div>
         </li>
       </ul>
@@ -35,11 +35,11 @@
     <!-- 中奖结果 -->
     <div class="l-layer" v-if="isShowWinner" transition="fade">
       <div class="l-draw-result">
-        <h3>恭喜获奖者</h3>
+        <h3>{{currPrize.name}}获得者</h3>
         <ul>
           <li v-for="index in drawWinners">
-            <img :src="nameList[index].image">
-            <p v-text="nameList[index].department"></p>
+            <img :src="nameList[index].head">
+            <p v-text="nameList[index].dept"></p>
             <p v-text="nameList[index].name"></p>
           </li>
         </ul>
@@ -62,7 +62,7 @@
               <th>奖项</th>
             </tr>
             <tr v-for="item in winnerHistory">
-              <td v-text="item.department"></td>
+              <td v-text="item.dept"></td>
               <td v-text="item.name"></td>
               <td v-text="item.prize"></td>
             </tr>

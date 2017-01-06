@@ -2,18 +2,28 @@
 var _prizeList = [
   {
     id: 1,
-    name: '一等奖',
-    winNum: 3,
+    name: '特等奖',
+    winNum: 1,
     isRepeat: 0
   },{
     id: 2,
-    name: '二等奖',
+    name: '一等奖',
     winNum: 5,
     isRepeat: 0
   },{
     id: 3,
+    name: '二等奖',
+    winNum: 10,
+    isRepeat: 0
+  },{
+    id: 4,
     name: '三等奖',
     winNum: 10,
+    isRepeat: 0
+  },{
+    id: 5,
+    name: '加码奖',
+    winNum: 1,
     isRepeat: 0
   }
 ];
@@ -41,8 +51,9 @@ var stopMic = function(audio){
   audio.currentTime = 0;
 }
 
-utils.storage.local.set('winnerHistory', utils.storage.local.get('winnerHistory') || []);
 utils.storage.local.set('prizeList', utils.storage.local.get('prizeList') || _prizeList);
+utils.storage.local.set('winnerHistory', utils.storage.local.get('winnerHistory') || []);
+
 
 var vm = new Vue({
   el: document.body,
@@ -78,31 +89,43 @@ var vm = new Vue({
     init: function(){
       var self = this;
       // 初始化抽奖名单(模拟数据)
-      var nameList = [];
-      for (var i = 200; i > 0; i--) {
-        nameList.push({
-          id: i,
-          name: '赖国聪'+i,
-          department: '技术部'+i,
-          thumb: 'http://thecodeplayer.com/u/uifaces/'+ ((i-1)%50+1) +'.jpg',
-          image: 'http://thecodeplayer.com/u/uifaces/'+ ((i-1)%50+1) +'.jpg',
-          isWinner: false
-        });
-      }
-
-      // 判断抽奖名单是否已中过奖
-      var winnerHistory = utils.storage.local.get('winnerHistory');
-      nameList.forEach(function(item){
-        winnerHistory.forEach(function(item2){
-          if(item2.id === item.id){
-            item.isWinner = true;
-            return true;
+      // var nameList = [];
+      // for (var i = 200; i > 0; i--) {
+      //   nameList.push({
+      //     id: i,
+      //     name: '赖国聪'+i,
+      //     dept: '技术部'+i,
+      //     thumbnail: 'http://thecodeplayer.com/u/uifaces/'+ ((i-1)%50+1) +'.jpg',
+      //     head: 'http://thecodeplayer.com/u/uifaces/'+ ((i-1)%50+1) +'.jpg',
+      //     isWin: false
+      //   });
+      // }
+      var promise = new Promise(function(resolve){
+        $.getJSON('http://test.aylsonclub.com/ym/ym/getStaffList', function(response){
+          if(response.success && response.data){
+            resolve(response.data);
           }
         });
       });
-      // 抽奖名单
-      self.nameList = nameList;
-      self.$nextTick(self.resetPosition);
+      
+      promise.then(function(nameList){
+        // 判断抽奖名单是否已中过奖
+        var winnerHistory = utils.storage.local.get('winnerHistory');
+        nameList.forEach(function(item){
+          item.thumbnail = 'staff/' + item.thumbnail;
+          item.head = 'staff/' + item.head;
+          winnerHistory.forEach(function(item2){
+            if(item2.id === item.id){
+              item.isWin = true;
+              return true;
+            }
+          });
+        });
+        // 抽奖名单
+        self.nameList = nameList;
+        self.$nextTick(self.resetPosition);
+      });
+      
     },
     resetPosition: function(){
       var self = this;
@@ -175,7 +198,7 @@ var vm = new Vue({
           rand = Math.floor(Math.random() * allNum);
           if(!drawWinners.includes(rand)){
             // 如果可重复抽奖或者之前没中过奖
-            if(isRepeat || !self.nameList[rand].isWinner){ 
+            if(isRepeat || !self.nameList[rand].isWin){ 
               drawWinners.push(rand);
               break;
             }
@@ -271,7 +294,7 @@ var vm = new Vue({
         $('#name-list .l-winner').removeClass('l-winner');
         self.drawWinners.forEach(function(index){
           item = self.nameList[index];
-          item.isWinner = true;
+          item.isWin = true;
           self.nameList.$set(index, item);
         });
 
