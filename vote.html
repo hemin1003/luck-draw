@@ -2,120 +2,55 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>艾臣安全门窗年会抽奖</title>
-<link rel="stylesheet" type="text/css" href="./css/app.css">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1">
+<meta name="format-detection" content="telephone=no" />
+<meta name="format-detection" content="telephone=no,email=no">
+<title>艾臣安全门窗年会节目投票</title>
 <style>
-body{background:#c60814 url('../images/bg.jpg') 50% 0 no-repeat; }
-.l-app{height: 100%;}
-.l-vote{width: 1200px;background-color: rgba(255,255,255, 0.8);border-radius: 10px;padding:50px;overflow: hidden;}
-.l-clock{position: relative;}
-.l-clock-time{position: absolute; color: rgba(255,255,255,1); text-align: center; right: 0; font-weight: bold; font-size: 140px; top: 22%; height: 400px; width: 400px; left: 9%; line-height: 400px;}
-.l-clock-time strong{font-size: 300px;}
-.l-vote-data{margin-left: 5%;}
-.l-vote-data-tit{text-align: center;font-weight: bold;color: rgba(0,0,0, 0.6);}
-.l-vote-item{height: 42px; line-height: 40px;margin-top: 20px; position: relative; border-radius: 3px;font-weight: bold;color: rgba(0,0,0, 0.6); z-index: 0;color: #fff;background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.5);}
-.l-vote-num{float: right; padding: 0 15px;}
-.l-vote-name{float: left; padding: 0 15px; width: 25%; text-align: center; background-color: rgba(0, 0, 0, 0.6); text-shadow: 1px 1px 1px #000;}
-.l-vote-mark{position: absolute;top:0;left:0;bottom: 0; width: 50%; z-index: -1; background-image: url(../images/progress.png);
-transition: width 1s linear;}
-.l-vote-mark:before, .l-vote-mark:after {content: ''; position: absolute; right: -1px; top: -10px; width: 1px; height: 60px;}
-.l-vote-mark:before {width: 7px; right: -4px; background: -webkit-radial-gradient(center, ellipse, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 75%); background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 75%);
-}
-.l-vote-mark:after {background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 25%, rgba(255, 255, 255, 0.3) 75%, rgba(255, 255, 255, 0) 100%); background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 25%, rgba(255, 255, 255, 0.3) 75%, rgba(255, 255, 255, 0) 100%); }
-.l-vote-item:nth-child(1) .l-vote-mark{background-color: #2dcc6a;}
-.l-vote-item:nth-child(2) .l-vote-mark{background-color: #535353;}
-.l-vote-item:nth-child(3) .l-vote-mark{background-color: #5c6aa7;}
-.l-vote-item:nth-child(4) .l-vote-mark{background-color: #2c3d50;}
-.l-vote-item:nth-child(5) .l-vote-mark{background-color: #3398da;}
-.l-vote-item:nth-child(6) .l-vote-mark{background-color: #e67b21;}
-.l-vote-item:nth-child(7) .l-vote-mark{background-color: #ff4d2a;}
-.l-vote-item:nth-child(8) .l-vote-mark{background-color: #fb1a1a;}
-
-.l-clock-start{cursor: pointer; position: absolute; color: rgba(255,255,255,1); background-color: rgba(49, 146, 209, 1); font: bold 100px/350px -webkit-body; display: block; border-radius: 50%; box-shadow: 3px 9px 0px rgb(44, 108, 150), 0px 9px 25px rgba(0,0,0,.7); text-align: center; height: 350px; width: 350px; transition: all .1s ease; top: 26%; left: 14%;
-}
-.l-clock-start:active {box-shadow: 0px 3px 0px rgb(44, 108, 150), 0px 3px 6px rgba(0,0,0,.9); top: 27%; }
+*{margin:0; padding: 0; box-sizing: border-box;-webkit-tap-highlight-color: rgba(0, 0, 0, 0);-webkit-touch-callout: none;}
+img{max-width: 100%;}
+body{background:#f4cc26;color: #1b1717;font-size: 16px;line-height: 1.6; -webkit-user-select:none;}
+.l-flex-h, .l-flex-hc, .l-flex-hvc, .l-flex-v, .l-flex-vc, .l-flex-vhc{display: -webkit-box;display: -ms-flexbox;display: flex; box-sizing: border-box; }
+ .l-flex-h, .l-flex-hc, .l-flex-hvc {-ms-flex-flow: row nowrap;flex-flow: row nowrap; }
+.l-flex-v, .l-flex-vc, .l-flex-vhc { -ms-flex-flow: column nowrap;flex-flow: column nowrap; }
+.l-flex-h {-webkit-box-align: strecth;-ms-flex-align: strecth;align-items: strecth; }
+.l-flex-hc, .l-flex-hvc {-webkit-box-align: center;-ms-flex-align: center;align-items: center; }
+.l-flex-hvc {-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center; }
+.l-flex-vc, .l-flex-vhc{-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center; }
+.l-flex-vhc {-webkit-box-align: center;-ms-flex-align: center;align-items: center; }
+[class*='l-flex-'] > .l-rest {-webkit-box-flex: 1;-ms-flex: 1;flex: 1; }
+.l-btn{ -webkit-appearance: none; border: none; background-color: rgba(255, 136, 6, 0.8); padding: 5px 20px; color: #fff; border-radius: 3px; box-shadow: 0px 2px 0px rgb(193, 104, 8), 0px 2px 4px rgba(0,0,0,.7); font-size: 14px;}
+.l-btn:active{outline: 0;}
+.l-btn:active{background-color: rgb(226, 121, 6);box-shadow: 0px 2px 0px rgb(193, 104, 8), 0px 1px 3px rgba(0,0,0,.7);}
+button.l-btn[disabled]{box-shadow: 0px 3px 0px rgb(181, 181, 180), 0px 3px 3px rgba(181, 181, 181, 0.9); top: 1px; background-color: #dedede; color: #929292; text-shadow: 1px 1px #fff; }
+.l-vote-list{margin:20px;}
+.l-vote-list li{margin:20px 0;}
+.l-vote-list li .l-rest{font-weight: 500;}
 </style>
 </head>
 <body>
-  <div id="app" class="l-app l-flex-vhc">
-    <div class="l-vote l-flex-hc">
-      <div class="l-clock">
-        <img src="images/clock.png" alt="">
-        <div class="l-clock-time">
-          <strong>10</strong>
-          <span>04:59</span>
+  <div id="app" class="l-app">
+    <img src="images/img-01.jpg" alt="">
+    <p style="padding: 0 55px; margin-top: -40px;">点击“投票”按钮，给你喜欢的节目投上宝贵的一票，每人只能投三票。</p>
+    <!-- 投票列表 -->
+    <ul class="l-vote-list">
+      <li class="l-flex-hc" v-for="item in 8">
+        <span v-text="$index+1+'、'"></span>
+        <div class="l-rest">
+          <span>《我型我秀》</span>--<span>IT部</span>
         </div>
-        <div class="l-clock-start">开始</div>
-      </div>
-      <div class="l-rest l-vote-data">
-        <div class="l-flex-hc l-vote-data-tit">
-          <p>节目名称</p>
-          <p class="l-rest">参与投票人数(160)</p>
-          <p>已投票(50)</p>
-        </div>
-        <div class="l-vote-list">
-          <div class="l-vote-item">
-            <span class="l-vote-num">100票</span>
-            <span class="l-vote-name">抓钱舞</span>
-            <div class="l-vote-mark"></div>
-          </div>
-          <div class="l-vote-item">
-            <span class="l-vote-num">100票</span>
-            <span class="l-vote-name">点赞</span>
-            <div class="l-vote-mark"></div>
-          </div>
-          <div class="l-vote-item">
-            <span class="l-vote-num">100票</span>
-            <span class="l-vote-name">我行我Show</span>
-            <div class="l-vote-mark"></div>
-          </div>
-          <div class="l-vote-item">
-            <span class="l-vote-num">100票</span>
-            <span class="l-vote-name">打工行</span>
-            <div class="l-vote-mark"></div>
-          </div>
-          <div class="l-vote-item">
-            <span class="l-vote-num">100票</span>
-            <span class="l-vote-name">群魔乱舞</span>
-            <div class="l-vote-mark"></div>
-          </div>
-          <div class="l-vote-item">
-            <span class="l-vote-num">100票</span>
-            <span class="l-vote-name">艾臣后传</span>
-            <div class="l-vote-mark"></div>
-          </div>
-          <div class="l-vote-item">
-            <span class="l-vote-num">100票</span>
-            <span class="l-vote-name">鸡情四射</span>
-            <div class="l-vote-mark"></div>
-          </div>
-          <div class="l-vote-item">
-            <span class="l-vote-num">100票</span>
-            <span class="l-vote-name">相信自己</span>
-            <div class="l-vote-mark"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="l-draw-btn-box">
-      <button class="l-btn" @click="this.isShowQrcode=true">投票二维码</button>&nbsp;
-      <button class="l-btn" onclick="window.location.href='index.html'">返回年会主页</button>
-    </div>
+        <button class="l-btn">投票</button>
+      </li>
+    </ul>
+    <br>
   </div>
-  <!-- 投票二维码 -->
-  <div class="l-layer" v-show="isShowQrcode" transition="fade">
-    <div class="l-prize-settings">
-      <h3>投票二维码</h3>
-      <div style="text-align: center;">
-        <img width="300" height="300" src="images/qrcode.jpg" alt="">
-        <p>请打开微信扫一扫进行投票</p><br>
-      </div>
-      <a class="l-close" @click="this.isShowQrcode = false">关闭</a>
-    </div>
-  </div>
+  <script>
+  document.body.addEventListener('touchstart', function () {});
+  </script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.28/vue.js"></script>
-  <script type="text/javascript" src="./js/utils.js"></script>
   <script>
     var vm = new Vue({
       el: document.body,
