@@ -5,8 +5,9 @@
   <title>艾臣智能门窗年会抽奖</title>
   <link rel="stylesheet" type="text/css" href="./css/app.css">
   <style>
-  body {height: 100%; background: #c60814 url('images/bg2.jpg') 50% 0 no-repeat; background-attachment: fixed; }
-  .l-href-btn {display: inline-block; background: #fad60d; color: #b00a00; padding: 15px 20px; min-width: 300px; font-weight: bold; font-size: 30px; text-align: center; border-radius: 5px; cursor: pointer; text-decoration: none; }
+  body {height: 100%; background: #c60814 url('images/bg2.jpg') 50% 0 no-repeat; background-attachment: fixed; overflow: hidden;}
+  .l-href-btn {display: inline-block; background: #fad60d; color: #b00a00; padding: 15px 20px; min-width: 300px; font-weight: bold; font-size: 30px; text-align: center; border-radius: 5px; cursor: pointer; text-decoration: none; box-shadow: 0px 5px 0px rgb(193, 104, 8), 0px 5px 25px rgb(250, 214, 13); transition: all .1s ease; }
+  .l-href-btn:active {box-shadow: 0px 3px 0px rgb(193, 104, 8), 0px 3px 6px rgba(0,0,0,.9); position: relative; top: 1px; }
   #star{opacity: 0.4;height: 100% !important;width: 100% !important;}
   </style>
 </head>
@@ -15,14 +16,15 @@
   <canvas id="star"></canvas> 
   <div style="position: absolute; bottom: 100px; left: 33%;">
     <a class="l-href-btn" href="lucky.html">抽奖</a>
-    <br>
-    <br>
-    <a class="l-href-btn">投票</a>
+    <br><br><br>
+    <a class="l-href-btn" href="vote.html">投票</a>
   </div>
   <audio autoplay loop>
     <source src="./music/bg.mp3">
   </audio>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.28/vue.js"></script>
+  <script type="tehttp://192.168.0.111:2703/lucky.htmlxt/javascript" src="./js/utils.js"></script>
   <script type="text/javascript">
   //宇宙特效
   var canvas = document.getElementById('star'),
@@ -35,12 +37,11 @@
     count = 0,
     maxStars = 1300; //星星数量
 
-  var canvas2 = document.createElement('canvas'),
-    ctx2 = canvas2.getContext('2d');
+  var canvas2 = document.createElement('canvas'), ctx2 = canvas2.getContext('2d');
   canvas2.width = 100;
   canvas2.height = 100;
-  var half = canvas2.width / 2,
-    gradient2 = ctx2.createRadialGradient(half, half, 0, half, half, half);
+
+  var half = canvas2.width / 2, gradient2 = ctx2.createRadialGradient(half, half, 0, half, half, half);
   gradient2.addColorStop(0.025, '#CCC');
   gradient2.addColorStop(0.1, 'hsl(' + Math.floor(Math.random()*hue) + ', 61%, 33%)');
   gradient2.addColorStop(0.25, 'hsl(' + Math.floor(Math.random()*hue) + ', 64%, 6%)');
@@ -54,7 +55,6 @@
   ctx2.fill();
   
   // End cache
-
   function random(min, max) {
     if (arguments.length < 2) {
       max = min;
@@ -126,9 +126,7 @@
 
     window.requestAnimationFrame(animation);
   }
-
   animation();
   </script>
 </body>
-
 </html>

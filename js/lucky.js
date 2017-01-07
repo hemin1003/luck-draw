@@ -27,6 +27,9 @@ var _prizeList = [
     isRepeat: 0
   }
 ];
+utils.storage.local.set('prizeList', utils.storage.local.get('prizeList') || _prizeList);
+utils.storage.local.set('winnerHistory', utils.storage.local.get('winnerHistory') || []);
+
 // 点击音效
 var clickmic = document.getElementById('clickmic');
 clickmic.volume = 0.5;
@@ -49,11 +52,7 @@ var stopMic = function(audio){
   clearInterval(audio.runtimeid);
   audio.pause();
   audio.currentTime = 0;
-}
-
-utils.storage.local.set('prizeList', utils.storage.local.get('prizeList') || _prizeList);
-utils.storage.local.set('winnerHistory', utils.storage.local.get('winnerHistory') || []);
-
+};
 
 var vm = new Vue({
   el: document.body,
@@ -186,14 +185,23 @@ var vm = new Vue({
       self.isCanStop = false;
       self.sort();
 
-      var allNum = self.nameList.length;      // 抽奖总人数
-      var isRepeat = self.currPrize.isRepeat; // 是否可以重复抽奖
-      var drawWinners = [];                   // 本次抽奖中奖名单(数组下标)
-      var winNum = self.currPrize.winNum;     // 本次中奖人数
-      var rand = 0;                           // 随机数
+      var allNum = self.nameList.length;                                // 抽奖总人数
+      var isRepeat = Number(self.currPrize.isRepeat);                   // 是否可以重复抽奖
+      var drawWinners = [];                                             // 本次抽奖中奖名单(数组下标)
+      var winNum = Math.min(self.currPrize.winNum, allNum);             // 本次中奖人数
+      var rand = 0;                                                     // 随机数
+
+      // 判断抽奖人数是否大于本次中奖人数
+      var drawNum = winNum;
+      if(!isRepeat){
+        var tempAllNum = self.nameList.filter(function(item){
+          return !item.isWin
+        }).length;
+        drawNum = Math.min(winNum, tempAllNum);
+      }
       
       // 随机抽取中奖名单
-      for(var i = 0; i < winNum; i++){
+      for(var i = 0; i < drawNum; i++){
         while(true){
           rand = Math.floor(Math.random() * allNum);
           if(!drawWinners.includes(rand)){
@@ -350,7 +358,7 @@ var vm = new Vue({
     },
     setNewPrizeList: function(){
       this.prizeList = this.newPrizeList.concat();
-      utils.storage.local.set('prizeList', this.prizeList);
+      utils.storage.local.set('prizeList', this.prizeList, 1000*3600*3);
       this.isShowSettings = false;
     },
     // 选择奖项

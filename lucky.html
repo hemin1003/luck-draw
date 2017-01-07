@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <title>艾臣安全门窗年会抽奖</title>
 <link rel="stylesheet" type="text/css" href="./css/app.css">
+<style>
+body{background:#c60814 url('../images/bg.jpg') 50% 0 no-repeat;}
+</style>
 </head>
 <body>
   <div id="app" class="l-app">
@@ -28,14 +31,17 @@
     </div>
     <div class="l-draw-btn-box">
       <button v-if="!isDrawing && !isStoping" class="l-btn" @click="drawStart">开始抽奖</button>
-      <button v-if="isDrawing && !isStoping" class="l-btn l-btn-error" @click="drawStop">停止抽奖</button>
-      <button v-if="isStoping" class="l-btn l-btn-success">等待结果</button>&nbsp;
-      <button class="l-btn" @click="showHistoryList">中奖名单</button>
+      <button v-if="isDrawing && !isStoping" class="l-btn l-btn-error" @click="drawStop">
+        <span style="color:#ff0606;">停止抽奖</span>
+      </button>
+      <button v-if="isStoping" class="l-btn l-active">等待结果</button>
+      &nbsp;<button class="l-btn" @click="showHistoryList">中奖名单</button>&nbsp;
+      <button class="l-btn" onclick="window.location.href='index.html'">返回年会主页</button>
     </div>
     <!-- 中奖结果 -->
     <div class="l-layer" v-if="isShowWinner" transition="fade">
       <div class="l-draw-result">
-        <h3>{{currPrize.name}}获得者</h3>
+        <h3><span style="color: red;">{{currPrize.name}}</span>获得者</h3>
         <ul>
           <li v-for="index in drawWinners">
             <img :src="nameList[index].head">
@@ -69,7 +75,7 @@
           </table>
         </div>
         <div style="text-align: center; margin: 20px 0 0 0;">
-          <button v-if="winnerHistory.length > 0" class="l-btn-default" @click="resetHistoryList" style="padding: 5px 10px;">清除中奖名单</button>  
+          <button class="l-btn-default" @click="resetHistoryList" style="padding: 5px 10px;">清除中奖名单</button>  
         </div>
         <a class="l-close" @click="this.isShowHistory = false">关闭</a>
       </div>
@@ -104,13 +110,12 @@
           </tr>
         </table>
         <div style="text-align: center;margin: 20px 0 10px;">
-          <button class="l-btn-default" @click="addPrize">增加奖项</button>&ensp;
-          <button class="l-btn-default" @click="setNewPrizeList">保存</button>
+          <button class="l-btn-white" @click="addPrize">增加奖项</button>&ensp;
+          <button class="l-btn-default" @click="setNewPrizeList">&emsp;保存&emsp;</button>
         </div>
         <a class="l-close" @click="this.isShowSettings = false">关闭</a>
       </div>
     </div>
-    <!-- 提示框 -->
   </div>
   <div class="l-hidden-area">
     <audio id="runingmic" loop>
@@ -128,6 +133,6 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.28/vue.js"></script>
   <script type="text/javascript" src="./js/utils.js"></script>
   <script type="text/javascript" src="./js/jquery.fireworks.js"></script>
-  <script type="text/javascript" src="./js/app.js"></script>
+  <script type="text/javascript" src="./js/lucky.js"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 * {margin: 0; padding: 0; box-sizing: border-box;}
 html{height: 100%;}
-body{height: 100%;background:#c60814 url('../images/bg.jpg') 50% 0 no-repeat;background-attachment: fixed;}
+body{height: 100%;background-attachment: fixed;user-select:none; cursor: default;}
 ul,li{list-style: none;}
 button{padding: 3px 10px;}
 table{border-collapse:collapse;}
@@ -14,7 +14,7 @@ table{border-collapse:collapse;}
 .l-name-item > div:after{content: '';position: absolute;top:0;left: 0;right: 0;bottom: 0;transition: all 0.3s linear;}
 .l-name-item img{width: 100%;height: 100%;border-radius: 2px;}
 .l-name-item.l-ignore img{filter:grayscale(100%);}
-.l-name-item.l-ignore > div:after{content: '已中奖'; background-color: rgba(0,0,0, 0.6); color: #fff; line-height: 54px; text-align: center; font-size: 12px; font-weight: bold;}
+.l-name-item.l-ignore > div:after{content: '已中奖'; background-color: rgba(0,0,0, 0.6); color: #fff; line-height: 64px; text-align: center; font-size: 12px; font-weight: bold;}
 .l-name-item.l-active,
 .l-name-item.l-winner{position: relative; z-index: 1;}
 .l-name-item.l-active > div,
@@ -32,14 +32,17 @@ table{border-collapse:collapse;}
 .l-prize-item.l-other{background-color: rgba(21, 158, 255, 0.8); color: #fff;}
 
 .l-draw-btn-box{margin: 20px auto;text-align: center;}
-.l-draw-btn-box .l-btn{border:none; background-color: rgba(255, 136, 6, 0.9);padding: 15px 30px;color: #fff; font-size: 16px;font-weight: bold;border-radius: 3px;}
-.l-draw-btn-box .l-btn:hover{background-color: rgba(255, 136, 6, 1);}
-.l-btn.l-btn-error{background-color: rgba(255, 0, 0, 0.8);}
-.l-btn.l-btn-error:hover{background-color: rgba(255, 0, 0, 1);}
-.l-btn.l-btn-success{background-color: rgba(76, 217, 100, 0.8);}
-.l-btn.l-btn-success:hover{background-color: rgba(76, 217, 100, 1);}
-.l-btn-default{border:none; background-color: rgba(21, 158, 255, 0.8);padding: 7px 15px;color: #fff; font-size: 14px;border-radius: 3px; }
+.l-draw-btn-box .l-btn{border: none; background-color: rgba(255, 136, 6, 0.9); padding: 15px 30px; color: #fff; font-size: 16px; font-weight: bold; border-radius: 6px; box-shadow: 0px 5px 0px rgb(193, 104, 8), 0px 5px 25px rgba(0,0,0,.7); transition: all .1s ease; outline: none;}
+.l-draw-btn-box .l-btn:active, 
+.l-draw-btn-box .l-btn.l-active {box-shadow: 0px 3px 0px rgb(193, 104, 8), 0px 3px 6px rgba(0,0,0,.9); position: relative; top: 1px; }
+.l-btn.l-btn-error{position: relative; top:-1px;}
+
+.l-btn-white,.l-btn-default{border:none; padding: 7px 15px; font-size: 14px;border-radius: 3px;border:1px solid transparent;}
+.l-btn-default{background-color: rgba(21, 158, 255, 0.8);color: #fff;}
 .l-btn-default:hover,.l-btn-default:active{background-color: rgba(21, 158, 255, 1);}
+.l-btn-white{background-color: rgba(255, 255, 255, 0.9);border-color: #ddd;}
+.l-btn-white:hover,.l-btn-white:active{background-color: rgba(240, 240, 240, 0.9);}
+
 .l-layer{
   position: fixed;top:0;left:0;bottom:0;right: 0; z-index: 100; background-color: rgba(0,0,0,0.1); /*opacity: 0;*/
   display: -webkit-box;display: -ms-flexbox;display: flex; opacity: 0;
@@ -59,14 +62,14 @@ table{border-collapse:collapse;}
 .l-draw-result li:only-child img{border-radius: 0;width: 300px;height: 300px; display: block; margin:auto;}
 .l-draw-result li:only-child p{display: inline-block; margin:20px 10px;}
 
-.l-winner-list{background-color: rgba(255,255,255,0.95); width: 600px;min-height: 300px; padding: 10px;border-radius: 5px; position: relative;}
+.l-winner-list{background-color: rgba(255,255,255,0.95); width: 600px;padding: 10px;border-radius: 5px; position: relative;}
 .l-winner-list > h3{font-size: 30px; margin:10px 0;text-align: center;}
 .l-winner-tab-tit{ display: -webkit-box;display: -ms-flexbox;display: flex; overflow: hidden; text-align: center;}
 .l-winner-tab-tit li{-webkit-box-flex: 1;-ms-flex: 1;flex: 1; display:inline-block;padding: 10px;cursor: pointer;background-color: #ddd;
     border-right: 1px solid #fff;}
 .l-winner-tab-tit li:last-child{border-right: none;}
 .l-winner-tab-tit li.l-active{background-color: #fb7704;color: #fff;}
-.l-winner-tab-cent{margin-top: -1px; max-height: 530px; overflow-x: hidden;overflow-y: auto;}
+.l-winner-tab-cent{margin-top: -1px; height: 530px; overflow-x: hidden;overflow-y: auto;}
 .l-winner-tab-cent table{width: 100%;}
 .l-winner-tab-cent th,.l-winner-tab-cent td{padding: 10px;text-align: center;border-top: 1px solid #ddd;}
 .l-prize-settings{background-color: rgba(255,255,255,0.95); width: 600px;min-height: 300px; padding: 10px;border-radius: 5px; position: relative;}
@@ -80,3 +83,72 @@ table{border-collapse:collapse;}
 .fade-transition{opacity:1; transition: opacity .3s ease-in; }
 .fade-enter,.fade-leave{opacity:0;}
 .fireworks{position:fixed;bottom:0;left:0;width:100%;height: 100%; z-index: 10; pointer-events: none;}
+
+/*
+  http://www.css88.com/book/css/
+  弹性布局===================
+*/
+.l-flex-h,
+.l-flex-hc,
+.l-flex-hvc,
+.l-flex-v,
+.l-flex-vc,
+.l-flex-vhc,
+.l-flex-wrap { /*应用于父元素 */
+  display: -webkit-box;display: -ms-flexbox;display: flex;
+  box-sizing: border-box;
+}
+/*
+  flex-flow: <' flex-direction '> || <' flex-wrap '>
+  flex-direction: row | row-reverse | column | column-reverse
+  flex-wrap: nowrap | wrap | wrap-reverse
+*/
+.l-flex-h,
+.l-flex-hc,
+.l-flex-hvc { /*水平排列*/
+  -ms-flex-flow: row nowrap;flex-flow: row nowrap;
+}
+.l-flex-v,
+.l-flex-vc,
+.l-flex-vhc { /*垂直排列*/
+  -ms-flex-flow: column nowrap;flex-flow: column nowrap;
+}
+/*
+  justify-content: flex-start | flex-end | center | space-between | space-around 用于不换行的弹性盒模型容器
+  align-items: flex-start | flex-end | center | baseline | stretch 用于不换行的弹性盒模型容器
+*/
+.l-flex-h { /*子元素高度相同*/
+  -webkit-box-align: strecth;-ms-flex-align: strecth;align-items: strecth;
+}
+.l-flex-hc,
+.l-flex-hvc { /*水平排列的垂直居中*/
+  -webkit-box-align: center;-ms-flex-align: center;align-items: center;
+}
+.l-flex-hvc { /*水平排列的水平居中*/
+  -webkit-box-pack: center;-ms-flex-pack: center;justify-content: center; 
+}
+.l-flex-vc,
+.l-flex-vhc{ /*垂直排列的垂直居中*/
+  -webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;
+}
+.l-flex-vhc { /*垂直排列的水平居中*/
+  -webkit-box-align: center;-ms-flex-align: center;align-items: center;
+}
+/*
+  align-content: flex-start | flex-end | center | space-between | space-around | stretch 用于换行的弹性盒模型容器
+*/
+.l-flex-wrap { /*水平排列-换行*/
+  -ms-flex-flow: row wrap;flex-flow: row wrap;
+}
+/*
+  设置子项
+  flex: none | <' flex-grow '> <' flex-shrink >'? || <' flex-basis '>
+  flex-grow: <number> 剩余空间扩展比例
+  flex-shrink: <number>  不足空间收缩比例
+  flex-basis: <length> | <percentage> | auto | content   // 基准值
+  align-self: auto | flex-start | flex-end | center | baseline | stretch
+*/
+[class*='l-flex-'] > .l-rest { /*如果只有设置其中一个子项，其将霸占剩余部分*/
+  -webkit-box-flex: 1;-ms-flex: 1;flex: 1;
+}
+/*弹性布局===================end*/
