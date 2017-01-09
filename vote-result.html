@@ -5,7 +5,6 @@
 <title>艾臣安全门窗年会节目投票</title>
 <link rel="stylesheet" type="text/css" href="./css/app.css">
 <style>
-body{background:#c60814 url('images/bg.jpg') 50% 0 no-repeat; }
 .l-app{height: 100%;}
 .l-vote{width: 1200px;background-color: rgba(255,255,255, 0.8);border-radius: 10px;padding:50px;overflow: hidden;}
 .l-clock{position: relative;}
@@ -14,22 +13,22 @@ body{background:#c60814 url('images/bg.jpg') 50% 0 no-repeat; }
 .l-vote-data{margin-left: 5%;}
 .l-vote-data-tit{text-align: center;font-weight: bold;color: rgba(0,0,0, 0.6);}
 .l-vote-item{height: 42px; line-height: 40px;margin-top: 20px; position: relative; border-radius: 3px;font-weight: bold;color: rgba(0,0,0, 0.6); z-index: 0;color: #fff;background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.5);}
-.l-vote-num{float: right; padding: 0 15px;}
-.l-vote-name{float: left; padding: 0 15px; width: 25%; text-align: center; background-color: rgba(0, 0, 0, 0.6); text-shadow: 1px 1px 1px #000;}
-.l-vote-mark{position: absolute;top:0;left:0;bottom: 0; width: 50%; z-index: -1; background-image: url(images/progress.png);
+.l-vote-num{float: right; padding: 0 15px;color: inherit;}
+.l-vote-name{display: inline-block;vertical-align: 0;padding: 0 0 0 10px; width: 38%; text-align: left; background-color: rgba(0, 0, 0, 0.2); text-shadow: 1px 1px 1px #000;}
+.l-vote-mark{position: absolute;top:0;left:0;bottom: 0; width: 38%; z-index: -1; background-image: url(images/progress.png);
 transition: width 1s linear;}
 .l-vote-mark:before, .l-vote-mark:after {content: ''; position: absolute; right: -1px; top: -10px; width: 1px; height: 60px;}
 .l-vote-mark:before {width: 7px; right: -4px; background: -webkit-radial-gradient(center, ellipse, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 75%); background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 75%);
 }
 .l-vote-mark:after {background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 25%, rgba(255, 255, 255, 0.3) 75%, rgba(255, 255, 255, 0) 100%); background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 25%, rgba(255, 255, 255, 0.3) 75%, rgba(255, 255, 255, 0) 100%); }
-.l-vote-item:nth-child(1) .l-vote-mark{background-color: #2dcc6a;}
-.l-vote-item:nth-child(2) .l-vote-mark{background-color: #535353;}
-.l-vote-item:nth-child(3) .l-vote-mark{background-color: #5c6aa7;}
-.l-vote-item:nth-child(4) .l-vote-mark{background-color: #2c3d50;}
-.l-vote-item:nth-child(5) .l-vote-mark{background-color: #3398da;}
-.l-vote-item:nth-child(6) .l-vote-mark{background-color: #e67b21;}
-.l-vote-item:nth-child(7) .l-vote-mark{background-color: #ff4d2a;}
-.l-vote-item:nth-child(8) .l-vote-mark{background-color: #fb1a1a;}
+.l-vote-item:nth-child(1) .l-vote-mark{background-color: #f50842;}
+.l-vote-item:nth-child(2) .l-vote-mark{background-color: #ffd300;}
+.l-vote-item:nth-child(3) .l-vote-mark{background-color: #d5048f;}
+.l-vote-item:nth-child(4) .l-vote-mark{background-color: #fbbb54;}
+.l-vote-item:nth-child(5) .l-vote-mark{background-color: #cdcd00;}
+.l-vote-item:nth-child(6) .l-vote-mark{background-color: #3299db;}
+.l-vote-item:nth-child(7) .l-vote-mark{background-color: #fc8f8f;}
+.l-vote-item:nth-child(8) .l-vote-mark{background-color: #ff99cd;}
 
 .l-clock-start{cursor: pointer; position: absolute; color: rgba(255,255,255,1); background-color: rgba(49, 146, 209, 1); font: bold 100px/350px -webkit-body; display: block; border-radius: 50%; box-shadow: 3px 9px 0px rgb(44, 108, 150), 0px 9px 25px rgba(0,0,0,.7); text-align: center; height: 350px; width: 350px; transition: all .1s ease; top: 26%; left: 14%;    text-shadow: 1px 1px #212121;
 }
@@ -50,51 +49,16 @@ transition: width 1s linear;}
         <div id="clock-start" class="l-clock-start">开始</div>
       </div>
       <div class="l-rest l-vote-data">
-        <div class="l-flex-hc l-vote-data-tit">
+        <!-- <div class="l-flex-hc l-vote-data-tit">
           <p>节目名称</p>
-          <p class="l-rest">参与投票人数(160)</p>
-          <p>已投票(50)</p>
-        </div>
+          <p class="l-rest">参与投票人数(0)</p>
+          <p>已投票(0)</p>
+        </div> -->
         <div class="l-vote-list">
-          <div class="l-vote-item">
-            <span class="l-vote-num">100票</span>
-            <span class="l-vote-name">抓钱舞</span>
-            <div class="l-vote-mark"></div>
-          </div>
-          <div class="l-vote-item">
-            <span class="l-vote-num">100票</span>
-            <span class="l-vote-name">点赞</span>
-            <div class="l-vote-mark"></div>
-          </div>
-          <div class="l-vote-item">
-            <span class="l-vote-num">100票</span>
-            <span class="l-vote-name">我行我Show</span>
-            <div class="l-vote-mark"></div>
-          </div>
-          <div class="l-vote-item">
-            <span class="l-vote-num">100票</span>
-            <span class="l-vote-name">打工行</span>
-            <div class="l-vote-mark"></div>
-          </div>
-          <div class="l-vote-item">
-            <span class="l-vote-num">100票</span>
-            <span class="l-vote-name">群魔乱舞</span>
-            <div class="l-vote-mark"></div>
-          </div>
-          <div class="l-vote-item">
-            <span class="l-vote-num">100票</span>
-            <span class="l-vote-name">艾臣后传</span>
-            <div class="l-vote-mark"></div>
-          </div>
-          <div class="l-vote-item">
-            <span class="l-vote-num">100票</span>
-            <span class="l-vote-name">鸡情四射</span>
-            <div class="l-vote-mark"></div>
-          </div>
-          <div class="l-vote-item">
-            <span class="l-vote-num">100票</span>
-            <span class="l-vote-name">相信自己</span>
-            <div class="l-vote-mark"></div>
+          <div class="l-vote-item" v-for="item in showList">
+            <span class="l-vote-num"><b v-text="item.voteCount"></b>票</span>
+            <span class="l-vote-name" v-text="item.name+'- '+item.dept"></span>
+            <div class="l-vote-mark" :style="{'width': 38 + Math.random() * 50 + item.voteCount*3 + '%'}"></div>
           </div>
         </div>
       </div>
@@ -123,7 +87,7 @@ transition: width 1s linear;}
   <script type="text/javascript" src="./js/utils.js"></script>
   <script>
     $('#qrcode').empty().qrcode({width: 260,height: 260,text: window.location.origin + '/vote.html'});
-    var leftTime = 15;
+    var leftTime = 300;
     var timeid = 0;
     var secondsToMin = function(seconds){
       var min = Math.floor(seconds / 60);
@@ -134,33 +98,58 @@ transition: width 1s linear;}
     // 计时开始
     var $clockTime = $('#clock-time');
     $('#clock-start').on('click', function(){
-      $clockTime.html('<span>'+secondsToMin(leftTime)+'</span>');
-      timeid = setInterval(function(){
-        if(--leftTime >= 0){
-          if(leftTime > 10){
-            $clockTime.html('<span>'+secondsToMin(leftTime)+'</span>');  
+      var self = this;
+      $(self).addClass('l-starting');
+      vm.startVote().then(function(){
+        $(self).hide(200).removeClass('l-starting');
+        $clockTime.html('<span>'+secondsToMin(leftTime)+'</span>');  
+        timeid = setInterval(function(){
+          if(--leftTime >= 0){
+            if(leftTime > 10){
+              $clockTime.html('<span>'+secondsToMin(leftTime)+'</span>');  
+            }else{
+              $clockTime.html('<strong>'+leftTime+'</strong>');  
+            }
           }else{
-            $clockTime.html('<strong>'+leftTime+'</strong>');  
+            $('#clock-end').show();
+            $clockTime.hide();
+            clearInterval(timeid);
           }
-        }else{
-          $('#clock-end').show();
-          $clockTime.hide();
-          clearInterval(timeid);
-        }
-      }, 1000);
-      $(this).hide();
+        }, 1000);
+      });
     });
 
     var vm = new Vue({
       el: document.body,
       data: function(){
         return {
-          isShowQrcode: false
+          isShowQrcode: false,
+          showList: []
         }
       },
+      ready: function(){
+        this.getVote();
+      },
       methods: {
+        // 节目列表
         getVote: function(){
-          
+          var self = this;
+          $.getJSON('http://test.aylsonclub.com/ym/ym/getProgramList', function(response){
+            if(response.success){
+              self.showList = response.data;
+            }
+          });
+        },
+        // 开始投票
+        startVote: function(){
+          var promise = new Promise(function(resolve){
+            $.post('http://test.aylsonclub.com/ym/ym/startVote', function(response){
+              resolve();
+              if(response.success){
+              }
+            }, 'json');  
+          });
+          return promise;
         }
       }
     })

@@ -38,7 +38,7 @@ var runingmic = document.getElementById('runingmic');
 runingmic.volume = 0.5;
 // 中奖音效
 var winnermic = document.getElementById('winnermic');
-winnermic.volume = 1.0;
+winnermic.volume = 0.8;
 
 var playMic = function(audio){
   setTimeout(function(){
@@ -167,7 +167,7 @@ var vm = new Vue({
         x = x2-x1;
         y = y2-y1;
 
-        $(this).css('transition', 'all 0.5s linear').css('transform', 'translate3d('+x+'px, '+y+'px, 0)');
+        $(this).css('transition', 'all 0.6s linear').css('transform', 'translate3d('+x+'px, '+y+'px, 0)');
       });
     },
     // 抽奖开始
@@ -363,8 +363,10 @@ var vm = new Vue({
     },
     // 选择奖项
     sltPrize: function(prizeEntity){
+      playMic(clickmic);
       $('#prize-list').removeClass('l-prize-tip');
-      this.currPrize = prizeEntity
+      this.currPrize = prizeEntity;
+
     }
   }
 });

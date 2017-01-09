@@ -10,6 +10,7 @@
 <title>艾臣安全门窗年会节目投票</title>
 <style>
 *{margin:0; padding: 0; box-sizing: border-box;-webkit-tap-highlight-color: rgba(0, 0, 0, 0);-webkit-touch-callout: none;}
+[v-cloak]{display: none;}
 img{max-width: 100%;}
 body{background:#f4cc26;color: #1b1717;font-size: 16px;line-height: 1.6; -webkit-user-select:none;}
 .l-flex-h, .l-flex-hc, .l-flex-hvc, .l-flex-v, .l-flex-vc, .l-flex-vhc{display: -webkit-box;display: -ms-flexbox;display: flex; box-sizing: border-box; }
@@ -21,7 +22,7 @@ body{background:#f4cc26;color: #1b1717;font-size: 16px;line-height: 1.6; -webkit
 .l-flex-vc, .l-flex-vhc{-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center; }
 .l-flex-vhc {-webkit-box-align: center;-ms-flex-align: center;align-items: center; }
 [class*='l-flex-'] > .l-rest {-webkit-box-flex: 1;-ms-flex: 1;flex: 1; }
-.l-btn{ -webkit-appearance: none; border: none; background-color: rgba(255, 136, 6, 0.8); padding: 5px 20px; color: #fff; border-radius: 3px; box-shadow: 0px 2px 0px rgb(193, 104, 8), 0px 2px 4px rgba(0,0,0,.7); font-size: 14px;}
+.l-btn{ -webkit-appearance: none; border: none; background-color: rgba(255, 136, 6, 0.8); color: #fff; border-radius: 3px; box-shadow: 0px 2px 0px rgb(193, 104, 8), 0px 2px 4px rgba(0,0,0,.7); font-size: 14px; width: 70px; text-align: center; padding: 5px 0;}
 .l-btn:active{outline: 0;}
 .l-btn:active{background-color: rgb(226, 121, 6);box-shadow: 0px 2px 0px rgb(193, 104, 8), 0px 1px 3px rgba(0,0,0,.7);}
 button.l-btn[disabled]{box-shadow: 0px 3px 0px rgb(181, 181, 180), 0px 3px 3px rgba(181, 181, 181, 0.9); top: 1px; background-color: #dedede; color: #929292; text-shadow: 1px 1px #fff; }
@@ -36,12 +37,12 @@ button.l-btn[disabled]{box-shadow: 0px 3px 0px rgb(181, 181, 180), 0px 3px 3px r
     <p style="padding: 0 55px; margin-top: -40px;">点击“投票”按钮，给你喜欢的节目投上宝贵的一票，每人只能投三票。</p>
     <!-- 投票列表 -->
     <ul class="l-vote-list">
-      <li class="l-flex-hc" v-for="item in 8">
+      <li class="l-flex-hc" v-for="item in showList" v-cloak>
         <span v-text="$index+1+'、'"></span>
         <div class="l-rest">
-          <span>《我型我秀》</span>--<span>IT部</span>
+          <span v-text="item.name+'- '+item.dept"></span>
         </div>
-        <button class="l-btn">投票</button>
+        <button class="l-btn" :disabled="voteNum >= 3 || item.state > 0" @click="vote(item)" v-text="stateStr[item.state]">投票</button>
       </li>
     </ul>
     <br>
@@ -52,12 +53,61 @@ button.l-btn[disabled]{box-shadow: 0px 3px 0px rgb(181, 181, 180), 0px 3px 3px r
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.28/vue.js"></script>
   <script>
+    var wxOpenId = '666';
     var vm = new Vue({
       el: document.body,
       data: function(){
         return {
-          isShowQrcode: false,
-          leftTime: 300
+          stateStr: ['投票', '投票中', '已投票'],
+          voteIds: (window.localStorage.getItem('_vote_ids') || '').split(','),
+          voteNum: Number(window.localStorage.getItem('_vote_num')) || 0,
+          showList: []
+        }
+      },
+      ready: function(){
+        this.getVote();
+      },
+      methods: {
+        // 节目列表
+        getVote: function(){
+          var self = this;
+          $.getJSON('http://test.aylsonclub.com/ym/ym/getProgramList', function(response){
+            if(response.success){
+              self.showList = response.data.map(function(item){
+                item.state = 0;
+                if (self.voteIds.includes(item.id)) {
+                  item.state = 2;
+                }
+                return item;
+              });
+            }
+          });
+        },
+        // 开始投票
+        vote: function(program){
+          var self = this;
+          if(self.voteNum >= 3 || program.state > 0) return;
+
+          var promise = new Promise(function(resolve){
+            program.state = 1;
+            $.post('http://test.aylsonclub.com/ym/ym/vote', {
+              programId: program.id,
+              voterId: wxOpenId
+            }, function(response){
+              resolve();
+              window.localStorage.setItem('_vote_num', ++self.voteNum);
+              if(!response.success){
+                program.state = 0;
+                window.localStorage.setItem('_vote_num', --self.voteNum < 0 ? 0 : self.voteNum);
+                alert(response.message);
+              }else{
+                program.state = 2;
+                self.voteIds.push(programId);
+                window.localStorage.setItem('_vote_ids', self.voteIds.join());
+              }
+            }, 'json');  
+          });
+          return promise;
         }
       }
     })

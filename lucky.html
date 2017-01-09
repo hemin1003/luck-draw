@@ -5,7 +5,6 @@
 <title>艾臣安全门窗年会抽奖</title>
 <link rel="stylesheet" type="text/css" href="./css/app.css">
 <style>
-body{background:#c60814 url('../images/bg.jpg') 50% 0 no-repeat;}
 </style>
 </head>
 <body>
@@ -28,6 +27,7 @@ body{background:#c60814 url('../images/bg.jpg') 50% 0 no-repeat;}
           <img width="300" src="images/tip.png" alt="">
         </div>
       </div>
+      <!-- <div id="draw-prize-tip" class="l-draw-prize-tip l-flex-vhc">一等奖</div> -->
     </div>
     <div class="l-draw-btn-box">
       <button v-if="!isDrawing && !isStoping" class="l-btn" @click="drawStart">开始抽奖</button>
@@ -63,11 +63,13 @@ body{background:#c60814 url('../images/bg.jpg') 50% 0 no-repeat;}
         <div class="l-winner-tab-cent">
           <table>
             <tr>
+              <th width="80">序号</th>
               <th>部门</th>
               <th>姓名</th>
               <th>奖项</th>
             </tr>
             <tr v-for="item in winnerHistory">
+              <td v-text="$index+1"></td>
               <td v-text="item.dept"></td>
               <td v-text="item.name"></td>
               <td v-text="item.prize"></td>

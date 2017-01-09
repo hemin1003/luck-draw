@@ -1,6 +1,6 @@
 * {margin: 0; padding: 0; box-sizing: border-box;}
 html{height: 100%;}
-body{height: 100%;background-attachment: fixed;user-select:none; cursor: default;}
+body{height: 100%;background:#ea0003 url('../images/bg4.jpg') 50% 0 no-repeat;background-size: cover;background-attachment: fixed;user-select:none; cursor: default;}
 ul,li{list-style: none;}
 button{padding: 3px 10px;}
 table{border-collapse:collapse;}
@@ -83,7 +83,7 @@ table{border-collapse:collapse;}
 .fade-transition{opacity:1; transition: opacity .3s ease-in; }
 .fade-enter,.fade-leave{opacity:0;}
 .fireworks{position:fixed;bottom:0;left:0;width:100%;height: 100%; z-index: 10; pointer-events: none;}
-
+.l-draw-prize-tip{position: absolute;top:0;left:0;bottom:0;right: 135px;background-color: rgba(0,0,0,0.1);border-radius: 10px;text-shadow: 3px 3px 2px #afa5a5, 10px 10px 15px rgba(0, 0, 0, 0.79); font-size: 300px;color: #fff; transition: all 0.5s linear 0.5s; visibility: hidden;z-index: -2;}
 /*
   http://www.css88.com/book/css/
   弹性布局===================
