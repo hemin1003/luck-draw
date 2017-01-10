@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>艾臣安全门窗年会抽奖</title>
-<link rel="stylesheet" type="text/css" href="./css/app.css">
+<link rel="stylesheet" type="text/css" href="./css/app.css?v=11">
 <style>
 </style>
 </head>
@@ -26,18 +26,20 @@
         <div class="l-prize-tip-text">
           <img width="300" src="images/tip.png" alt="">
         </div>
+
+        <div class="l-draw-btn-box">
+          <button v-if="!isDrawing && !isStoping" class="l-btn" @click="drawStart">开始抽奖</button>
+          <button v-if="isDrawing && !isStoping" class="l-btn l-btn-error" @click="drawStop">
+            <span style="color:#ff0606;">停止抽奖</span>
+          </button>
+          <button v-if="isStoping" class="l-btn l-active">等待结果</button>
+          &nbsp;<button class="l-btn" @click="showHistoryList">中奖名单</button>&nbsp;
+          <button class="l-btn" onclick="window.location.href='index.html'">年会主页</button>
+        </div>
       </div>
       <!-- <div id="draw-prize-tip" class="l-draw-prize-tip l-flex-vhc">一等奖</div> -->
     </div>
-    <div class="l-draw-btn-box">
-      <button v-if="!isDrawing && !isStoping" class="l-btn" @click="drawStart">开始抽奖</button>
-      <button v-if="isDrawing && !isStoping" class="l-btn l-btn-error" @click="drawStop">
-        <span style="color:#ff0606;">停止抽奖</span>
-      </button>
-      <button v-if="isStoping" class="l-btn l-active">等待结果</button>
-      &nbsp;<button class="l-btn" @click="showHistoryList">中奖名单</button>&nbsp;
-      <button class="l-btn" onclick="window.location.href='index.html'">返回年会主页</button>
-    </div>
+    
     <!-- 中奖结果 -->
     <div class="l-layer" v-if="isShowWinner" transition="fade">
       <div class="l-draw-result">
@@ -135,6 +137,6 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.28/vue.js"></script>
   <script type="text/javascript" src="./js/utils.js"></script>
   <script type="text/javascript" src="./js/jquery.fireworks.js"></script>
-  <script type="text/javascript" src="./js/lucky.js"></script>
+  <script type="text/javascript" src="./js/lucky.js?v=11"></script>
 </body>
 </html>

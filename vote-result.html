@@ -13,10 +13,10 @@
 .l-vote-data{margin-left: 5%;}
 .l-vote-data-tit{text-align: center;font-weight: bold;color: rgba(0,0,0, 0.6);}
 .l-vote-item{height: 42px; line-height: 40px;margin-top: 20px; position: relative; border-radius: 3px;font-weight: bold;color: rgba(0,0,0, 0.6); z-index: 0;color: #fff;background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.5);}
-.l-vote-num{float: right; padding: 0 15px;color: inherit;}
+.l-vote-num{float: right; padding: 0 15px; color: #ffffff; text-shadow: 1px 1px 1px #000;}
 .l-vote-name{display: inline-block;vertical-align: 0;padding: 0 0 0 10px; width: 38%; text-align: left; background-color: rgba(0, 0, 0, 0.2); text-shadow: 1px 1px 1px #000;}
 .l-vote-mark{position: absolute;top:0;left:0;bottom: 0; width: 38%; z-index: -1; background-image: url(images/progress.png);
-transition: width 1s linear;}
+transition: width 2s linear;}
 .l-vote-mark:before, .l-vote-mark:after {content: ''; position: absolute; right: -1px; top: -10px; width: 1px; height: 60px;}
 .l-vote-mark:before {width: 7px; right: -4px; background: -webkit-radial-gradient(center, ellipse, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 75%); background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 75%);
 }
@@ -58,14 +58,15 @@ transition: width 1s linear;}
           <div class="l-vote-item" v-for="item in showList">
             <span class="l-vote-num"><b v-text="item.voteCount"></b>票</span>
             <span class="l-vote-name" v-text="item.name+'- '+item.dept"></span>
-            <div class="l-vote-mark" :style="{'width': 38 + Math.random() * 50 + item.voteCount*3 + '%'}"></div>
+            <div class="l-vote-mark" :style="{'width': 38 + item.voteCount*2 + '%'}"></div>
           </div>
         </div>
       </div>
     </div>
     <div class="l-draw-btn-box">
+      <button class="l-btn" @click="resetVote">重新投票</button>&nbsp;
       <button class="l-btn" @click="this.isShowQrcode=true">投票二维码</button>&nbsp;
-      <button class="l-btn" onclick="window.location.href='index.html'">返回年会主页</button>
+      <button class="l-btn" onclick="window.location.href='index.html'">年会主页</button>
     </div>
   </div>
   <!-- 投票二维码 -->
@@ -88,7 +89,7 @@ transition: width 1s linear;}
   <script>
     $('#qrcode').empty().qrcode({width: 260,height: 260,text: window.location.origin + '/vote.html'});
     var leftTime = 300;
-    var timeid = 0;
+    var timeid1 = 0, timeid2 = 0;
     var secondsToMin = function(seconds){
       var min = Math.floor(seconds / 60);
       var s = seconds % 60;
@@ -97,13 +98,20 @@ transition: width 1s linear;}
 
     // 计时开始
     var $clockTime = $('#clock-time');
-    $('#clock-start').on('click', function(){
+    var $startBtn = $('#clock-start');
+    var $endBtn = $('#clock-end');
+    $startBtn.on('click', function(){
       var self = this;
       $(self).addClass('l-starting');
+
+      clearInterval(timeid1);
+      clearInterval(timeid2);
       vm.startVote().then(function(){
         $(self).hide(200).removeClass('l-starting');
-        $clockTime.html('<span>'+secondsToMin(leftTime)+'</span>');  
-        timeid = setInterval(function(){
+        $clockTime.html('<span>'+secondsToMin(leftTime)+'</span>');
+
+        // 更新计时器
+        timeid1 = setInterval(function(){
           if(--leftTime >= 0){
             if(leftTime > 10){
               $clockTime.html('<span>'+secondsToMin(leftTime)+'</span>');  
@@ -111,11 +119,16 @@ transition: width 1s linear;}
               $clockTime.html('<strong>'+leftTime+'</strong>');  
             }
           }else{
-            $('#clock-end').show();
+            clearInterval(timeid1);
+            clearInterval(timeid2);
+
+            $endBtn.show();
             $clockTime.hide();
-            clearInterval(timeid);
           }
         }, 1000);
+
+        // 更新票数
+        timeid2 = setInterval(vm.getVote, 3000);
       });
     });
 
@@ -128,7 +141,8 @@ transition: width 1s linear;}
         }
       },
       ready: function(){
-        this.getVote();
+        var self = this;
+        self.getVote();
       },
       methods: {
         // 节目列表
@@ -138,7 +152,7 @@ transition: width 1s linear;}
             if(response.success){
               self.showList = response.data;
             }
-          });
+          });  
         },
         // 开始投票
         startVote: function(){
@@ -146,10 +160,22 @@ transition: width 1s linear;}
             $.post('http://test.aylsonclub.com/ym/ym/startVote', function(response){
               resolve();
               if(response.success){
+
               }
             }, 'json');  
           });
           return promise;
+        },
+        // 重新投票
+        resetVote: function(){
+          var self = this;
+          $.post('http://test.aylsonclub.com/ym/ym/restartVote', function(response){
+            clearInterval(timeid1);
+            clearInterval(timeid2);
+            self.getVote();
+            $endBtn.hide();
+            $startBtn.show();
+          }, 'json');  
         }
       }
     })

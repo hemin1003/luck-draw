@@ -250,7 +250,7 @@ var vm = new Vue({
       var promises = [];
       self.drawWinners.forEach(function(value){
         var promise = new Promise(function(resolve){
-          setTimeout(function(){
+          // setTimeout(function(){
             $('#l-name-' + value).addClass('l-winner');
             var item = Object.assign({
               prize: self.currPrize.name,
@@ -259,7 +259,7 @@ var vm = new Vue({
 
             winnerHistory.push(item);
             resolve();
-          }, Math.random() * 3000);
+          // }, Math.random() * 3000);
         });
 
         promises.push(promise);

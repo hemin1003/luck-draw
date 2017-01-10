@@ -31,7 +31,7 @@ table{border-collapse:collapse;}
 .l-prize-item:last-child{border-bottom: none;}
 .l-prize-item.l-other{background-color: rgba(21, 158, 255, 0.8); color: #fff;}
 
-.l-draw-btn-box{margin: 20px auto;text-align: center;}
+.l-draw-btn-box{margin: 20px auto;text-align: right;}
 .l-draw-btn-box .l-btn{border: none; background-color: rgba(255, 136, 6, 0.9); padding: 15px 30px; color: #fff; font-size: 16px; font-weight: bold; border-radius: 6px; box-shadow: 0px 5px 0px rgb(193, 104, 8), 0px 5px 25px rgba(0,0,0,.7); transition: all .1s ease; outline: none;}
 .l-draw-btn-box .l-btn:active, 
 .l-draw-btn-box .l-btn.l-active {box-shadow: 0px 3px 0px rgb(193, 104, 8), 0px 3px 6px rgba(0,0,0,.9); position: relative; top: 1px; }

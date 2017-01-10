@@ -26,9 +26,12 @@ body{background:#f4cc26;color: #1b1717;font-size: 16px;line-height: 1.6; -webkit
 .l-btn:active{outline: 0;}
 .l-btn:active{background-color: rgb(226, 121, 6);box-shadow: 0px 2px 0px rgb(193, 104, 8), 0px 1px 3px rgba(0,0,0,.7);}
 button.l-btn[disabled]{box-shadow: 0px 3px 0px rgb(181, 181, 180), 0px 3px 3px rgba(181, 181, 181, 0.9); top: 1px; background-color: #dedede; color: #929292; text-shadow: 1px 1px #fff; }
+.l-btn.l-active{background-color: rgb(226, 121, 6) !important; color: #fff !important; box-shadow: none !important; text-shadow: none !important; }
 .l-vote-list{margin:20px;}
 .l-vote-list li{margin:20px 0;}
 .l-vote-list li .l-rest{font-weight: 500;}
+.l-result-tip{position: fixed;top:0;left: 0;bottom: 0;right: 0; background-color: rgba(0,0,0, 0.8);padding: 0 20px;}
+.l-result-tip p{color: #fff;font-size: 28px;}
 </style>
 </head>
 <body>
@@ -42,25 +45,51 @@ button.l-btn[disabled]{box-shadow: 0px 3px 0px rgb(181, 181, 180), 0px 3px 3px r
         <div class="l-rest">
           <span v-text="item.name+'- '+item.dept"></span>
         </div>
-        <button class="l-btn" :disabled="voteNum >= 3 || item.state > 0" @click="vote(item)" v-text="stateStr[item.state]">投票</button>
+        <button class="l-btn" :disabled="voteNum >= 3 || item.state > 0" :class="{'l-active': item.state === 2}" @click="vote(item)" v-text="stateStr[item.state]">投票</button>
       </li>
     </ul>
     <br>
   </div>
+  <div v-cloak class="l-result-tip l-flex-vhc" v-if="voteNum >= 3">
+    <img src="images/img-02.png" alt="">
+    <br>
+    <p>投票结果请看大屏幕</p>
+  </div>
+  <script type="text/javascript" src="./js/utils.js"></script>
   <script>
   document.body.addEventListener('touchstart', function () {});
+  var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc8123454324da8b0&redirect_uri='+window.location.href+'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect';
+  var code = utils.url.getArgs().code || '';
+  if(!code && utils.device.isWechat){
+    window.location.replace(url);
+  }
   </script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.28/vue.js"></script>
   <script>
-    var wxOpenId = '666';
+    var wxOpenId = Math.random().toString('16');
+    var voteIds = window.localStorage.getItem(wxOpenId + '_vote_ids');
+
+    // 微信授权
+    if(utils.device.isWechat){
+      $.getJSON('http://test.aylsonclub.com/ym/wx/frame/getByCode', {
+        code: code
+      }, function (response) {
+        if(response.success && response.data){
+          wxOpenId = response.data.openid + '|' + response.data.nickname;
+        }else{
+          alert(response.message);
+        }
+      }); 
+    }
+
     var vm = new Vue({
       el: document.body,
       data: function(){
         return {
           stateStr: ['投票', '投票中', '已投票'],
-          voteIds: (window.localStorage.getItem('_vote_ids') || '').split(','),
-          voteNum: Number(window.localStorage.getItem('_vote_num')) || 0,
+          voteIds: voteIds ? voteIds.split(',') : [],
+          voteNum: Number(window.localStorage.getItem(wxOpenId + '_vote_num')) || 0,
           showList: []
         }
       },
@@ -75,7 +104,7 @@ button.l-btn[disabled]{box-shadow: 0px 3px 0px rgb(181, 181, 180), 0px 3px 3px r
             if(response.success){
               self.showList = response.data.map(function(item){
                 item.state = 0;
-                if (self.voteIds.includes(item.id)) {
+                if (self.voteIds.includes(item.id+'')) {
                   item.state = 2;
                 }
                 return item;
@@ -95,15 +124,15 @@ button.l-btn[disabled]{box-shadow: 0px 3px 0px rgb(181, 181, 180), 0px 3px 3px r
               voterId: wxOpenId
             }, function(response){
               resolve();
-              window.localStorage.setItem('_vote_num', ++self.voteNum);
+              window.localStorage.setItem(wxOpenId + '_vote_num', ++self.voteNum);
               if(!response.success){
                 program.state = 0;
-                window.localStorage.setItem('_vote_num', --self.voteNum < 0 ? 0 : self.voteNum);
+                window.localStorage.setItem(wxOpenId + '_vote_num', --self.voteNum < 0 ? 0 : self.voteNum);
                 alert(response.message);
               }else{
                 program.state = 2;
-                self.voteIds.push(programId);
-                window.localStorage.setItem('_vote_ids', self.voteIds.join());
+                self.voteIds.push(program.id);
+                window.localStorage.setItem(wxOpenId + '_vote_ids', self.voteIds.join());
               }
             }, 'json');  
           });
