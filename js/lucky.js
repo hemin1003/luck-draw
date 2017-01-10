@@ -251,7 +251,7 @@ var vm = new Vue({
       self.drawWinners.forEach(function(value){
         var promise = new Promise(function(resolve){
           // setTimeout(function(){
-            $('#l-name-' + value).addClass('l-winner');
+            $('#name-' + value).addClass('l-winner');
             var item = Object.assign({
               prize: self.currPrize.name,
               prizeId: self.currPrize.id

@@ -10,7 +10,7 @@
 <title>艾臣安全门窗年会节目投票</title>
 <style>
 *{margin:0; padding: 0; box-sizing: border-box;-webkit-tap-highlight-color: rgba(0, 0, 0, 0);-webkit-touch-callout: none;}
-[v-cloak]{display: none;}
+[v-cloak]{display: none !important;}
 img{max-width: 100%;}
 body{background:#f4cc26;color: #1b1717;font-size: 16px;line-height: 1.6; -webkit-user-select:none;}
 .l-flex-h, .l-flex-hc, .l-flex-hvc, .l-flex-v, .l-flex-vc, .l-flex-vhc{display: -webkit-box;display: -ms-flexbox;display: flex; box-sizing: border-box; }
@@ -33,6 +33,7 @@ button.l-btn[disabled]{box-shadow: 0px 3px 0px rgb(181, 181, 180), 0px 3px 3px r
 .l-result-tip{position: fixed;top:0;left: 0;bottom: 0;right: 0; background-color: rgba(0,0,0, 0.8);padding: 0 20px;}
 .l-result-tip p{color: #fff;font-size: 28px;}
 </style>
+<script type="text/javascript" src="./js/vue.min.js"></script>
 </head>
 <body>
   <div id="app" class="l-app">
@@ -40,7 +41,7 @@ button.l-btn[disabled]{box-shadow: 0px 3px 0px rgb(181, 181, 180), 0px 3px 3px r
     <p style="padding: 0 55px; margin-top: -40px;">点击“投票”按钮，给你喜欢的节目投上宝贵的一票，每人只能投三票。</p>
     <!-- 投票列表 -->
     <ul class="l-vote-list">
-      <li class="l-flex-hc" v-for="item in showList" v-cloak>
+      <li class="l-flex-hc" v-for="item in showList" >
         <span v-text="$index+1+'、'"></span>
         <div class="l-rest">
           <span v-text="item.name+'- '+item.dept"></span>
@@ -55,30 +56,53 @@ button.l-btn[disabled]{box-shadow: 0px 3px 0px rgb(181, 181, 180), 0px 3px 3px r
     <br>
     <p>投票结果请看大屏幕</p>
   </div>
-  <script type="text/javascript" src="./js/utils.js"></script>
+  <script type="text/javascript">
+    var isWechat = /micromessenger/i.test(navigator.userAgent);
+    var getArgs = function(url) {
+      if(typeof url !== 'string') url = window.location.href
+      url = decodeURIComponent(url)
+      var pos = url.indexOf('?'),
+        pos2 = url.lastIndexOf('#'),
+        qs = pos > -1 ? url.substring(pos+1, pos2 <= pos ? url.length : pos2) : '',
+        items = qs.split('&')
+      var args = {},
+        arg = null, 
+        name = null,
+        value = null
+      for(var i=0, splitPos = 0, item=null; i<items.length; i++){
+        item = items[i]
+        splitPos = item.indexOf('=')
+        name  = item.substring(0, splitPos)
+        value  = item.substring(splitPos+1)
+        args[name] = value
+      }
+      return args
+    };
+  </script>
   <script>
   document.body.addEventListener('touchstart', function () {});
   var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc8123454324da8b0&redirect_uri='+window.location.href+'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect';
-  var code = utils.url.getArgs().code || '';
-  if(!code && utils.device.isWechat){
+  var code = getArgs().code || '';
+  if(!code && isWechat){
     window.location.replace(url);
   }
   </script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.28/vue.js"></script>
+  <script type="text/javascript" src="./js/jquery.min.js"></script>
+  
   <script>
-    var wxOpenId = Math.random().toString('16');
-    var voteIds = window.localStorage.getItem(wxOpenId + '_vote_ids');
+    // var wxOpenId = Math.random().toString('16');
+    var wxOpenId = '';
+    var voteIds = window.localStorage.getItem('_vote_ids');
 
     // 微信授权
-    if(utils.device.isWechat){
+    if(code && isWechat){
       $.getJSON('http://test.aylsonclub.com/ym/wx/frame/getByCode', {
         code: code
       }, function (response) {
         if(response.success && response.data){
           wxOpenId = response.data.openid + '|' + response.data.nickname;
         }else{
-          alert(response.message);
+          // alert(response.message);
         }
       }); 
     }
@@ -89,7 +113,7 @@ button.l-btn[disabled]{box-shadow: 0px 3px 0px rgb(181, 181, 180), 0px 3px 3px r
         return {
           stateStr: ['投票', '投票中', '已投票'],
           voteIds: voteIds ? voteIds.split(',') : [],
-          voteNum: Number(window.localStorage.getItem(wxOpenId + '_vote_num')) || 0,
+          voteNum: Number(window.localStorage.getItem('_vote_num')) || 0,
           showList: []
         }
       },
@@ -102,13 +126,22 @@ button.l-btn[disabled]{box-shadow: 0px 3px 0px rgb(181, 181, 180), 0px 3px 3px r
           var self = this;
           $.getJSON('http://test.aylsonclub.com/ym/ym/getProgramList', function(response){
             if(response.success){
-              self.showList = response.data.map(function(item){
+              if(!response.data[0].startVoteTime){
+                window.localStorage.setItem('_vote_num', '');
+                window.localStorage.setItem('_vote_ids', '');
+                self.voteNum = 0;
+                self.voteIds = [];
+              }
+              var tempList= [];
+              for (var i = 0; i < response.data.length; i++) {
+                var item = response.data[i];
                 item.state = 0;
-                if (self.voteIds.includes(item.id+'')) {
+                if (self.voteIds.indexOf(item.id+'') !== -1) {
                   item.state = 2;
                 }
-                return item;
-              });
+                tempList.push(item);
+              }
+              self.showList = tempList;
             }
           });
         },
@@ -117,6 +150,11 @@ button.l-btn[disabled]{box-shadow: 0px 3px 0px rgb(181, 181, 180), 0px 3px 3px r
           var self = this;
           if(self.voteNum >= 3 || program.state > 0) return;
 
+          if(!wxOpenId){
+            alert('获取不到微信信息，请重新进入页面授权');
+            return;            
+          }
+
           var promise = new Promise(function(resolve){
             program.state = 1;
             $.post('http://test.aylsonclub.com/ym/ym/vote', {
@@ -124,15 +162,15 @@ button.l-btn[disabled]{box-shadow: 0px 3px 0px rgb(181, 181, 180), 0px 3px 3px r
               voterId: wxOpenId
             }, function(response){
               resolve();
-              window.localStorage.setItem(wxOpenId + '_vote_num', ++self.voteNum);
+              window.localStorage.setItem('_vote_num', ++self.voteNum);
               if(!response.success){
                 program.state = 0;
-                window.localStorage.setItem(wxOpenId + '_vote_num', --self.voteNum < 0 ? 0 : self.voteNum);
+                window.localStorage.setItem('_vote_num', --self.voteNum < 0 ? 0 : self.voteNum);
                 alert(response.message);
               }else{
                 program.state = 2;
                 self.voteIds.push(program.id);
-                window.localStorage.setItem(wxOpenId + '_vote_ids', self.voteIds.join());
+                window.localStorage.setItem('_vote_ids', self.voteIds.join());
               }
             }, 'json');  
           });

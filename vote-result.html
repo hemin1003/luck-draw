@@ -46,7 +46,7 @@ transition: width 2s linear;}
           <!-- <span>04:59</span> -->
         </div>
         <div id="clock-end" class="l-clock-start l-disabled" style="display: none;">结束</div>
-        <div id="clock-start" class="l-clock-start">开始</div>
+        <div id="clock-start" class="l-clock-start" style="display: none;">开始</div>
       </div>
       <div class="l-rest l-vote-data">
         <!-- <div class="l-flex-hc l-vote-data-tit">
@@ -82,14 +82,17 @@ transition: width 2s linear;}
       <a class="l-close" @click="this.isShowQrcode = false">关闭</a>
     </div>
   </div>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.28/vue.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+  <script type="text/javascript" src="./js/vue.min.js"></script>
+  <script type="text/javascript" src="./js/jquery.min.js"></script>
+  <script type="text/javascript" src="./js/jquery.qrcode.min.js"></script>
   <script type="text/javascript" src="./js/utils.js"></script>
   <script>
-    $('#qrcode').empty().qrcode({width: 260,height: 260,text: window.location.origin + '/vote.html'});
-    var leftTime = 300;
+    
+    $('#qrcode').empty().qrcode({width: 260,height: 260,text: 'http://test.aylsonclub.com/ym/html/vote.html'});
     var timeid1 = 0, timeid2 = 0;
+    var startTime = window.localStorage.getItem('_start_time') || 0;
+    var diffTime = Math.floor( (new Date().getTime() - startTime) / 1000 );
+
     var secondsToMin = function(seconds){
       var min = Math.floor(seconds / 60);
       var s = seconds % 60;
@@ -100,9 +103,20 @@ transition: width 2s linear;}
     var $clockTime = $('#clock-time');
     var $startBtn = $('#clock-start');
     var $endBtn = $('#clock-end');
-    $startBtn.on('click', function(){
+    $startBtn.bind('click', function(){
+      // $(window).bind('beforeunload',function(e){
+      //   return '投票已经开始，确定离开此页面吗？';
+      // });
       var self = this;
       $(self).addClass('l-starting');
+
+      // 记录开始时间
+      var leftTime = 300;
+      if(startTime > 0 && diffTime < 300){
+        leftTime = 300 - diffTime;
+      }else{
+        window.localStorage.setItem('_start_time', new Date().getTime());
+      }
 
       clearInterval(timeid1);
       clearInterval(timeid2);
@@ -124,6 +138,8 @@ transition: width 2s linear;}
 
             $endBtn.show();
             $clockTime.hide();
+
+            window.localStorage.setItem('_start_time', 0);
           }
         }, 1000);
 
@@ -143,6 +159,13 @@ transition: width 2s linear;}
       ready: function(){
         var self = this;
         self.getVote();
+        if(startTime > 0){
+          setTimeout(function(){
+            $startBtn.trigger('click');  
+          }, 50);
+        }else{
+          $startBtn.show();
+        }
       },
       methods: {
         // 节目列表
@@ -168,6 +191,7 @@ transition: width 2s linear;}
         },
         // 重新投票
         resetVote: function(){
+          window.localStorage.setItem('_start_time', 0);
           var self = this;
           $.post('http://test.aylsonclub.com/ym/ym/restartVote', function(response){
             clearInterval(timeid1);
@@ -176,9 +200,12 @@ transition: width 2s linear;}
             $endBtn.hide();
             $startBtn.show();
           }, 'json');  
+
         }
       }
-    })
+    });
+
+    
   </script>
 </body>
 </html>

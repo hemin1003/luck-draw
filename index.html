@@ -30,9 +30,23 @@
   <audio autoplay loop>
     <source src="./music/bg.mp3">
   </audio>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.28/vue.js"></script>
-  <script type="tehttp://192.168.0.111:2703/lucky.htmlxt/javascript" src="./js/utils.js"></script>
+  <div id="img-list" style="height: 0;overflow: hidden;">
+    
+  </div>
+  <script type="text/javascript" src="./js/vue.min.js"></script>
+  <script type="text/javascript" src="./js/jquery.min.js"></script>
+  <script type="text/javascript" src="./js/utils.js"></script>
+  <script>
+    var $imgs = $('#img-list').empty();
+    $.getJSON('http://test.aylsonclub.com/ym/ym/getStaffList', function(response){
+      if(response.success && response.data){
+        response.data.forEach(function(item){
+          $imgs.append('<img src="staff/'+item.thumbnail+'">');
+          $imgs.append('<img src="staff/'+item.head+'">');
+        });
+      }
+    });
+  </script>
   <script type="text/javascript">
   //宇宙特效
   var canvas = document.getElementById('star'),
