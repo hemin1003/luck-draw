@@ -32,7 +32,7 @@ table{border-collapse:collapse;}
 .l-prize-item.l-other{background-color: rgba(21, 158, 255, 0.8); color: #fff;}
 
 .l-draw-btn-box{margin: 20px auto;text-align: right;}
-.l-draw-btn-box .l-btn{border: none; background-color: rgba(255, 136, 6, 0.9); padding: 15px 30px; color: #fff; font-size: 16px; font-weight: bold; border-radius: 6px; box-shadow: 0px 5px 0px rgb(193, 104, 8), 0px 5px 25px rgba(0,0,0,.7); transition: all .1s ease; outline: none;}
+.l-draw-btn-box .l-btn{border: none; margin: 10px 0; background-color: rgba(255, 136, 6, 0.9); padding: 15px 30px; color: #fff; font-size: 16px; font-weight: bold; border-radius: 6px; box-shadow: 0px 5px 0px rgb(193, 104, 8), 0px 5px 25px rgba(0,0,0,.7); transition: all .1s ease; outline: none;}
 .l-draw-btn-box .l-btn:active, 
 .l-draw-btn-box .l-btn.l-active {box-shadow: 0px 3px 0px rgb(193, 104, 8), 0px 3px 6px rgba(0,0,0,.9); position: relative; top: 1px; }
 .l-btn.l-btn-error{position: relative; top:-1px;}
@@ -52,15 +52,15 @@ table{border-collapse:collapse;}
 }
 .l-layer .l-close{position: absolute; top: -15px; right: -15px; width: 50px; height: 50px; line-height: 50px; text-align: center; border-radius: 50%; background-color: rgba(255, 255, 255, 0.95); font-size: 14px; cursor: pointer; }
 
-.l-draw-result{background-color: rgba(255,255,255,0.95);padding: 15px; margin:20px 0; text-align: center;width: 650px; min-height: 300px; border-radius: 5px; position: relative; }
-.l-draw-result > h3{font-size: 30px; margin:10px 0 20px 0;}
-.l-draw-result ul{overflow: hidden;overflow-x: hidden;overflow-y: auto; max-height: 520px;}
-.l-draw-result li{display: inline-block;margin:10px;}
+.l-draw-result{background: rgba(255,255,255,0.7) url(../images/bg5.png) no-repeat 50% 50%;padding: 15px; margin:20px 0; text-align: center;width: 1000px; height: 668px; border-radius: 5px; position: relative; }
+.l-draw-result > h3{font-size: 30px; margin:160px 0 20px 0;}
+.l-draw-result ul{overflow-x: hidden;overflow-y: auto;height: 335px;margin: 0 auto;width: 730px;}
+.l-draw-result li{display: inline-block;margin: 5px 15px;}
 .l-draw-result li img{width: 100px;height: 100px; border-radius: 50%;border: 1px solid #999;}
 .l-draw-result li p{margin: 5px 0;font-weight: bold;}
 
-.l-draw-result li:only-child img{border-radius: 0;width: 300px;height: 300px; display: block; margin:auto;}
-.l-draw-result li:only-child p{display: inline-block; margin:20px 10px;}
+.l-draw-result li:only-child img{width: 260px; height: 260px; display: block; margin: auto;}
+.l-draw-result li:only-child p{display: inline-block; margin:20px 2px;}
 
 .l-winner-list{background-color: rgba(255,255,255,0.95); width: 600px;padding: 10px;border-radius: 5px; position: relative;}
 .l-winner-list > h3{font-size: 30px; margin:10px 0;text-align: center;}

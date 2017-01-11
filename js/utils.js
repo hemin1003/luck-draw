@@ -19,19 +19,6 @@
   })();
   var utils = {
     noop: function(){},
-    extend: function(target, ...objs) {
-      if(!utils.isPlainObject(target)) return null
-      objs.forEach((obj) => {
-        if(utils.isPlainObject(obj)){
-          Object.keys(obj).forEach((key)=>{
-            if(obj[key] !== null && obj[key] !== undefined){
-              target[key] = obj[key]
-            }
-          })
-        }
-      })
-      return target
-    },
     type: function(value) {
       //如果是null或者undefined，直接转成String返回
       if( value == null )  return String( value )
@@ -85,9 +72,6 @@
     },
     isNumber: function(value) {
       return !isNaN( parseFloat(value) ) && isFinite( value );
-    },
-    toptip: function(text) {
-      window.alert(text);
     }
   };
 
@@ -96,50 +80,6 @@
   var storage = {
     getPrefix: function(){
       return STORE_PREFIX;
-    },
-    cookies: {
-      get(sKey) {
-        if (!sKey) return null
-        sKey = STORE_PREFIX + sKey
-        return decodeURIComponent(document.cookie.replace(new RegExp('(?:(?:^|.*;)\\s*' + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, '\\$&') + '\\s*\\=\\s*([^;]*).*$)|^.*$'), '$1')) || null
-      },
-      set(sKey, sValue, vEnd = 1800, sPath = '/', sDomain = '', bSecure = false) {
-        if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey))  return false
-
-        sKey = STORE_PREFIX + sKey
-        var sExpires = ''
-        if (vEnd) {
-          switch (vEnd.constructor) {
-            case Number: // 单位秒
-              sExpires = vEnd === Infinity ? '; expires=Fri, 31 Dec 9999 23:59:59 GMT' : '; max-age=' + vEnd
-              break
-            case String:
-              sExpires = '; expires=' + vEnd
-              break
-            case Date:
-              sExpires = '; expires=' + vEnd.toUTCString()
-              break
-          }
-        }
-        document.cookie = encodeURIComponent(sKey) + '=' + encodeURIComponent(sValue) + sExpires + (sDomain ? '; domain=' + sDomain : '') + (sPath ? '; path=' + sPath : '') + (bSecure ? '; secure' : '')
-        return true
-      },
-      remove(sKey, sPath = '/', sDomain = '') {
-        if (!this.has(sKey)) return false 
-
-        sKey = STORE_PREFIX + sKey
-        document.cookie = encodeURIComponent(sKey) + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT' + (sDomain ? '; domain=' + sDomain : '') + (sPath ? '; path=' + sPath : '')
-        return true
-      },
-      has(sKey) {
-        if (!sKey) return false
-        return (new RegExp('(?:^|;\\s*)' + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, '\\$&') + '\\s*\\=')).test(document.cookie)
-      },
-      keys() {
-        var aKeys = document.cookie.replace(/((?:^|\s*;)[^\=]+)(?=;|$)|^\s*|\s*(?:\=[^;]*)?(?:\1|$)/g, '').split(/\s*(?:\=[^;]*)?;\s*/)
-        for (var nLen = aKeys.length, nIdx = 0; nIdx < nLen; nIdx++) { aKeys[nIdx] = decodeURIComponent(aKeys[nIdx]) }
-        return aKeys
-      }
     },
     session: {
       set(key, value) {
@@ -152,8 +92,11 @@
       } 
     },
     local: {
-      set(key, value, ms = 1000*3600*24*365) {
+      set(key, value, ms) {
+
         if(!key) return false
+
+        ms = ms || 1000*3600*24*365
         
         key = STORE_PREFIX + key
         var newValue = {

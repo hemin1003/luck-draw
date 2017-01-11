@@ -35,10 +35,10 @@ var clickmic = document.getElementById('clickmic');
 clickmic.volume = 0.5;
 // 抽奖音效
 var runingmic = document.getElementById('runingmic');
-runingmic.volume = 0.5;
+runingmic.volume = 0.3;
 // 中奖音效
 var winnermic = document.getElementById('winnermic');
-winnermic.volume = 0.8;
+winnermic.volume = 0.6;
 
 var playMic = function(audio){
   setTimeout(function(){
@@ -53,6 +53,7 @@ var stopMic = function(audio){
   audio.pause();
   audio.currentTime = 0;
 };
+
 
 var vm = new Vue({
   el: document.body,
@@ -99,6 +100,7 @@ var vm = new Vue({
       //     isWin: false
       //   });
       // }
+
       var promise = new Promise(function(resolve){
         $.getJSON('http://test.aylsonclub.com/ym/ym/getStaffList', function(response){
           if(response.success && response.data){
@@ -195,7 +197,7 @@ var vm = new Vue({
       var drawNum = winNum;
       if(!isRepeat){
         var tempAllNum = self.nameList.filter(function(item){
-          return !item.isWin
+          return !item.isWin;
         }).length;
         drawNum = Math.min(winNum, tempAllNum);
       }
@@ -204,7 +206,7 @@ var vm = new Vue({
       for(var i = 0; i < drawNum; i++){
         while(true){
           rand = Math.floor(Math.random() * allNum);
-          if(!drawWinners.includes(rand)){
+          if(drawWinners.indexOf(rand) === -1){
             // 如果可重复抽奖或者之前没中过奖
             if(isRepeat || !self.nameList[rand].isWin){ 
               drawWinners.push(rand);
@@ -282,10 +284,12 @@ var vm = new Vue({
         self.isShowWinner = true;
 
         // 播放烟花
-        $('#fireworks').fireworks({ 
-          sound: true, // sound effect
-          opacity: 0.8
-        });
+        setTimeout(function(){
+          $('#fireworks').fireworks({ 
+            sound: true, // sound effect
+            opacity: 0.8
+          });
+        }, 1000);
         
       }).catch(function(){
         stopMic(runingmic)

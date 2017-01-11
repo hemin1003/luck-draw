@@ -2,7 +2,7 @@
   // cache the sounds if the plugin has been configured to use soudns
   var audio = document.createElement('audio');
   audio.loop = true;
-  audio.volume = 0.5;
+  audio.volume = 0.4;
   audio.src = 'music/fireworks.mp3';
 
   $.fn.fireworks = function(options) {
